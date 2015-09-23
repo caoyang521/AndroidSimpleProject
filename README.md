@@ -1,2 +1,2 @@
 # AndroidSimpleProject
-Some simple demo project that i practiced from JK
+Some simple demo project that i practiced.
