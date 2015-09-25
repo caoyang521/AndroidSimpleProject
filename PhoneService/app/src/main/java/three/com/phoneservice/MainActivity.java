@@ -12,18 +12,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import three.com.phoneservice.Db.Db;
+import three.com.phoneservice.Utility.Utility;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView textView=null;
     private Button startbtn=null;
     private Button stopbtn=null;
     private PhoneServer.MyBinder myBinder=null;
+    private Db db=null;
 
     private ServiceConnection serviceConnection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             myBinder= (PhoneServer.MyBinder) service;
-            myBinder.getText(textView);
+            myBinder.getDb(textView, db);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Utility.createPersonInfo(db);
+                }
+            }).start();
         }
 
         @Override
@@ -39,16 +49,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView= (TextView) findViewById(R.id.text);
         startbtn= (Button) findViewById(R.id.startbtn);
         stopbtn= (Button) findViewById(R.id.stopbtn);
-
         startbtn.setOnClickListener(this);
         stopbtn.setOnClickListener(this);
+        db=Db.getInstance(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.startbtn:
-                Intent startIntent=new Intent(MainActivity.this,PhoneServer.class);
+                Intent startIntent=new Intent(this,PhoneServer.class);
                 bindService(startIntent,serviceConnection,BIND_AUTO_CREATE);
                 break;
             case R.id.stopbtn:

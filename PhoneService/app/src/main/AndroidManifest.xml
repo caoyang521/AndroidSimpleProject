@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".PhoneServer"/>
+        <service
+            android:name="three.com.phoneservice.PhoneServer" />
     </application>
 
 </manifest>

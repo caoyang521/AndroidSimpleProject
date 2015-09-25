@@ -11,13 +11,18 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
 
+import three.com.phoneservice.Db.Db;
+import three.com.phoneservice.Model.PeopleInfo;
+
 /**
  * Created by Administrator on 2015/9/24.
  */
 public class PhoneServer extends Service{
 
     private TelephonyManager telephonyManager=null;
-    private MyBinder myBinder=new MyBinder();
+    private final MyBinder myBinder=new MyBinder();
+    private Db db=null;
+    private PeopleInfo peopleInfo=null;
 
     @Override
     public void onCreate() {
@@ -37,8 +42,12 @@ public class PhoneServer extends Service{
                     case TelephonyManager.CALL_STATE_OFFHOOK:
                         break;
                     case TelephonyManager.CALL_STATE_RINGING:
-                        Log.d("My Service",number);
-                        textView.setText(number);
+                        Log.d("My Service", number);
+                        peopleInfo=db.loadPerson(number);
+                        if(peopleInfo!=null)
+                            textView.setText(peopleInfo.getName()+" "+peopleInfo.getNumber());
+                        else
+                            textView.setText("查询失败");
                         break;
                     default:
                         break;
@@ -48,6 +57,7 @@ public class PhoneServer extends Service{
         };
         // 监听电话通话状态的改变
         telephonyManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+
     }
 
     @Override
@@ -60,12 +70,14 @@ public class PhoneServer extends Service{
     public IBinder onBind(Intent intent) {
         return myBinder;
     }
+
     private TextView textView=null;
 
     class MyBinder extends Binder {
 
-        public void getText(TextView mytextView){
+        public void getDb(TextView mytextView,Db mdb){
             textView=mytextView;
+            db=mdb;
         }
     }
 }
