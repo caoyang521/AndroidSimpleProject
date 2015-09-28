@@ -10,6 +10,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.Model.PeopleInfo;
@@ -44,10 +45,13 @@ public class PhoneServer extends Service{
                     case TelephonyManager.CALL_STATE_RINGING:
                         Log.d("My Service", number);
                         peopleInfo=db.loadPerson(number);
-                        if(peopleInfo!=null)
-                            textView.setText(peopleInfo.getName()+" "+peopleInfo.getNumber());
+                        if(peopleInfo!=null){
+                           // textView.setText(peopleInfo.getName()+" "+peopleInfo.getNumber());
+                            Toast.makeText(getApplicationContext(),peopleInfo.getName(),Toast.LENGTH_LONG).show();
+
+                        }
                         else
-                            textView.setText("查询失败");
+                          //  textView.setText("查询失败");
                         break;
                     default:
                         break;
@@ -72,12 +76,14 @@ public class PhoneServer extends Service{
     }
 
     private TextView textView=null;
+    private Context context=null;
 
     class MyBinder extends Binder {
 
-        public void getDb(TextView mytextView,Db mdb){
+        public void getDb(TextView mytextView,Db mdb,Context mcontext){
             textView=mytextView;
             db=mdb;
+            context=mcontext;
         }
     }
 }

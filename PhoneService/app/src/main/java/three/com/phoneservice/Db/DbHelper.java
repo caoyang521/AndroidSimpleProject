@@ -1,6 +1,7 @@
 package three.com.phoneservice.Db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -23,7 +24,35 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_PERSON);
+        if (tabbleIsExist("Person")==false)
+            db.execSQL(CREATE_PERSON);
+    }
+
+    /**
+     * 判断某张表是否存在
+     */
+    public boolean tabbleIsExist(String tableName){
+        boolean result = false;
+        if(tableName == null){
+            return false;
+        }
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = this.getReadableDatabase();
+            String sql = "select count(*) as c from Sqlite_master  where type ='table' and name ='"+tableName.trim()+"' ";
+            cursor = db.rawQuery(sql, null);
+            if(cursor.moveToNext()){
+                int count = cursor.getInt(0);
+                if(count>0){
+                    result = true;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override

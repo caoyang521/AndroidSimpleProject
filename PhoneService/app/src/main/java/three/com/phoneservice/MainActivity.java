@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import three.com.phoneservice.Db.Db;
-import three.com.phoneservice.Utility.Utility;
+import three.com.phoneservice.Utility.HttpUtility;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,13 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             myBinder= (PhoneServer.MyBinder) service;
-            myBinder.getDb(textView, db);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Utility.createPersonInfo(db);
-                }
-            }).start();
+            myBinder.getDb(textView, db,MainActivity.this);
+            HttpUtility.sendHttpRequest(db);
         }
 
         @Override
@@ -60,10 +55,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.startbtn:
                 Intent startIntent=new Intent(this,PhoneServer.class);
                 bindService(startIntent,serviceConnection,BIND_AUTO_CREATE);
+                //startService(startIntent);
                 break;
             case R.id.stopbtn:
-              //Intent stopIntent=new Intent(MainActivity.this,PhoneServer.class);
+                //Intent stopIntent=new Intent(MainActivity.this,PhoneServer.class);
                 unbindService(serviceConnection);
+                //stopService(stopIntent);
                 break;
             default:
                 break;
