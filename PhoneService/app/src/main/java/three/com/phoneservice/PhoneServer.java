@@ -47,6 +47,11 @@ public class PhoneServer extends Service{
                     case TelephonyManager.CALL_STATE_IDLE:
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK:
+                        if(mFloatLayout != null)
+                        {
+                            //移除悬浮窗口
+                            mWindowManager.removeView(mFloatLayout);
+                        }
                         break;
                     case TelephonyManager.CALL_STATE_RINGING:
                         Log.d("My Service", number);
@@ -56,8 +61,8 @@ public class PhoneServer extends Service{
                            // Toast.makeText(getApplicationContext(),peopleInfo.getName(),Toast.LENGTH_LONG).show();
                            createFloatView(peopleInfo.getName(),peopleInfo.getNumber());
                         }
-                        else
-                          //  textView.setText("查询失败");
+//                        else
+//                          //  textView.setText("查询失败");
                         break;
                     default:
                         break;
