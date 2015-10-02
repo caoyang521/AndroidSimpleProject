@@ -10,13 +10,12 @@ import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.Model.PeopleInfo;
@@ -47,10 +46,10 @@ public class PhoneServer extends Service{
                     case TelephonyManager.CALL_STATE_IDLE:
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK:
-                        if(mFloatLayout != null)
+                        if(btn_floatView != null)
                         {
                             //移除悬浮窗口
-                            mWindowManager.removeView(mFloatLayout);
+                            wm.removeView(btn_floatView);
                         }
                         break;
                     case TelephonyManager.CALL_STATE_RINGING:
@@ -61,8 +60,9 @@ public class PhoneServer extends Service{
                            // Toast.makeText(getApplicationContext(),peopleInfo.getName(),Toast.LENGTH_LONG).show();
                            createFloatView(peopleInfo.getName(),peopleInfo.getNumber());
                         }
-//                        else
-//                          //  textView.setText("查询失败");
+                        else{
+                            Toast.makeText(getApplicationContext(),"查询失败",Toast.LENGTH_LONG).show();
+                        }
                         break;
                     default:
                         break;
@@ -98,72 +98,74 @@ public class PhoneServer extends Service{
         }
     }
 
-    //定义浮动窗口布局
-    LinearLayout mFloatLayout;
-    WindowManager.LayoutParams wmParams;
-    //创建浮动窗口设置布局参数的对象
-    WindowManager mWindowManager;
-    Button mFloatView;
+    private boolean isAdded = false; // 是否已增加悬浮窗
+    private static WindowManager wm;
+    private static WindowManager.LayoutParams params;
+    private Button btn_floatView;
+    /**
+     * 创建悬浮窗
+     */
+    private void createFloatView(String name,String number) {
 
-    private void createFloatView(String number,String name)
-    {
-        wmParams = new WindowManager.LayoutParams();
-        //获取的是WindowManagerImpl.CompatModeWrapper
-        mWindowManager = (WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
+        btn_floatView = new Button(getApplicationContext());
+        btn_floatView.setText(name+" "+number);
 
-        wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
-        //设置图片格式，效果为背景透明
-        wmParams.format = PixelFormat.RGBA_8888;
-        //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        //调整悬浮窗显示的停靠位置为左侧置顶
-        wmParams.gravity = Gravity.CENTER | Gravity.BOTTOM;
-        // 以屏幕左上角为原点，设置x、y初始值，相对于gravity
-        wmParams.x = 0;
-        wmParams.y = 0;
+        wm = (WindowManager) getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        params = new WindowManager.LayoutParams();
+
+        // 设置window type
+        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+
+        /*
+         * 如果设置为params.type = WindowManager.LayoutParams.TYPE_PHONE;
+         * 那么优先级会降低一些, 即拉下通知栏不可见
+         */
+
+        params.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
+
+        // 设置Window flag
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        /*
+         * 下面的flags属性的效果形同“锁定”。
+         * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
+        wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL
+                               | LayoutParams.FLAG_NOT_FOCUSABLE
+                               | LayoutParams.FLAG_NOT_TOUCHABLE;
+         */
 
         //设置悬浮窗口长宽数据
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        LayoutInflater inflater = LayoutInflater.from(getApplication());
-        //获取浮动窗口视图所在布局
-        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout, null);
-        //添加mFloatLayout
-        mWindowManager.addView(mFloatLayout, wmParams);
+        // 设置悬浮窗的Touch监听
+        btn_floatView.setOnTouchListener(new View.OnTouchListener() {
+            int lastX, lastY;
+            int paramX, paramY;
 
-        //浮动窗口按钮
-        mFloatView = (Button)mFloatLayout.findViewById(R.id.floatbtn);
-        mFloatView.setText(name +" "+number);
-        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
-                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
-                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
+                        paramX = params.x;
+                        paramY = params.y;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        int dx = (int) event.getRawX() - lastX;
+                        int dy = (int) event.getRawY() - lastY;
+                        params.x = paramX + dx;
+                        params.y = paramY + dy;
+                        // 更新悬浮窗位置
+                        wm.updateViewLayout(btn_floatView, params);
+                        break;
+                }
+                return true;
+            }
+        });
 
-//        //设置监听浮动窗口的触摸移动
-//        mFloatView.setOnTouchListener(new View.OnTouchListener()
-//        {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event)
-//            {
-//                //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-//                wmParams.x = (int) event.getX() - mFloatView.getMeasuredWidth()/2;
-//                //减25为状态栏的高度
-//                wmParams.y = (int) event.getY() - mFloatView.getMeasuredHeight()/2 - 25;
-//                //刷新
-//                mWindowManager.updateViewLayout(mFloatLayout, wmParams);
-//                return false;  //此处必须返回false，否则OnClickListener获取不到监听
-//            }
-//        });
-
-//        mFloatView.setOnClickListener(new OnClickListener()
-//        {
-//
-//            @Override
-//            public void onClick(View v)
-//            {
-//                Toast.makeText(FxService.this, "onClick", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        wm.addView(btn_floatView, params);
+        isAdded = true;
     }
 }

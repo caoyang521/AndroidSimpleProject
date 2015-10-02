@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            serviceConnection=null;
         }
     };
     @Override
@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.stopbtn:
                 //Intent stopIntent=new Intent(MainActivity.this,PhoneServer.class);
-                unbindService(serviceConnection);
+                if(serviceConnection!=null)
+                    unbindService(serviceConnection);
                 //stopService(stopIntent);
                 break;
             default:
