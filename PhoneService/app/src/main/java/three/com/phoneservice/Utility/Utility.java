@@ -1,6 +1,7 @@
 package three.com.phoneservice.Utility;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,28 +28,33 @@ public class Utility {
 //    }
 
     public synchronized static boolean handlePersonResponse(Db db){
-        int flag=1;
+
         boolean isover=false;
         if (TextUtils.isEmpty(HttpUtility.response))
             return isover;
         try{
-            if(flag==1){
+
+            {
                 PeopleInfo peopleInfo =new PeopleInfo();
                 peopleInfo.setName("张特");
-                peopleInfo.setNumber("13958839460");
+                peopleInfo.setNumber("13967860592");
                 db.savePerson(peopleInfo);
-                flag=-1;
+
             }
             JSONObject jsonObject = new JSONObject(String.valueOf(HttpUtility.response));
             JSONArray jsonArray = jsonObject.getJSONArray("rows");
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONObject peopleObj =jsonArray.getJSONObject(i);
-                PeopleInfo peopleInfo =new PeopleInfo();
-                peopleInfo.setName(peopleObj.getString("学生姓名"));
-                peopleInfo.setNumber(peopleObj.getString("手机短号"));
-                db.savePerson(peopleInfo);
-            }
+            Log.i("test","begin");
+            db.savePerson(jsonArray);
+//
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//
+//                JSONObject peopleObj =jsonArray.getJSONObject(i);
+//                PeopleInfo peopleInfo =new PeopleInfo();
+//                peopleInfo.setName(peopleObj.getString("学生姓名"));
+//                peopleInfo.setNumber(peopleObj.getString("手机短号"));
+//                db.savePerson(peopleInfo);
+//            }
+            Log.i("test","emd");
             isover=true;
         }catch(Exception e){
             e.printStackTrace();

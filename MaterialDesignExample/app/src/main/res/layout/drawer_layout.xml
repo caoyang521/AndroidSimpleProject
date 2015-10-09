@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            tools:layout="@layout/activity_main" />
+            tools:layout="@layout/new_title_list" />
     </LinearLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"

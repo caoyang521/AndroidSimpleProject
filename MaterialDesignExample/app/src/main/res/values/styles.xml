@@ -1,8 +1,16 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
+    <style
+        name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+    <style
+        name="AppCompatActivityTheme" parent="Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
 
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#3b8dff</item>
+
+    </style>
 </resources>

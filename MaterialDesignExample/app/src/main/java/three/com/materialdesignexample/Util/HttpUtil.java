@@ -15,27 +15,50 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
-import three.com.materialdesignexample.DrawerLayoutActivity;
+import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.Framgment.NewsFramgment;
 import three.com.materialdesignexample.Models.News;
+import three.com.materialdesignexample.MyAdapter;
 
 /**
  * Created by Administrator on 2015/10/8.
  */
 public class HttpUtil  {
-    public static ArrayList<News> dataset=new ArrayList<News>();
 
-    public static void getHtmlUtil( Context context){
+    public static LinkedHashMap<String,News> datamap=new LinkedHashMap<String,News>();
+
+    public static String path;
+
+    public static void getHtmlUtil( Context context,String url,final int type, final CallBack callBack){
+
+        if(url.equals(News.NEWS_INDEX)==false){
+            path=url;
+            url=News.INDEX+path;
+        }
 
         RequestQueue mQueue = Volley.newRequestQueue(context);
 
-        StringRequest stringRequest = new StringRequest("http://www.kyren.net/Category_17/Index.aspx",
+        StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("TAG", response);
-                        parseData(response);
+
+                        switch (type){
+                            case News.TITLE:
+                                callBack.onStart();
+                                parseTitleData(response);
+                                callBack.onFinsh();
+                                break;
+                            case News.CONTENT:
+                                callBack.onStart();
+                                parseContentData(response);
+                                callBack.onFinsh();
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -47,7 +70,7 @@ public class HttpUtil  {
         mQueue.add(stringRequest);
     }
 
-    private static void parseData(String response){
+    private static void parseTitleData(String response){
 
         if (response!=null&&!"".equals(response)) {
             Document doc = Jsoup.parse(response);
@@ -59,16 +82,28 @@ public class HttpUtil  {
                 News news =new News();
                 news.setPath(href);
                 news.setTitle(title);
-                dataset.add(news);
+                datamap.put(news.getPath(), news);
             }
-            closeProgressDialog();
+            NewsFramgment.adapter=new MyAdapter(new ArrayList<News>(datamap.values()),MyAdapter.context);
+            NewsFramgment.recyclerView.setAdapter(NewsFramgment.adapter);
             NewsFramgment.adapter.notifyDataSetChanged();
         }
     }
 
-    private static void closeProgressDialog() {
-        if (DrawerLayoutActivity.progressDialog != null) {
-            DrawerLayoutActivity.progressDialog.dismiss();
+    private static void parseContentData(String response){
+
+        if (response!=null&&!"".equals(response)) {
+            Document document = Jsoup.parse(response);
+            Elements pElements =  pElements = document.select("p");
+
+            StringBuilder sb = new StringBuilder();
+            for (Element e : pElements) {
+                String str = e.text();
+                sb.append(str + "\n");
+            }
+            datamap.get(path).setContent(sb.toString());
         }
+
     }
+
 }

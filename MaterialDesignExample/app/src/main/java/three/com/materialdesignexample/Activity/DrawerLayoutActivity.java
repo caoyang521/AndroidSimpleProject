@@ -1,4 +1,4 @@
-package three.com.materialdesignexample;
+package three.com.materialdesignexample.Activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -9,7 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.Framgment.NewsFramgment;
+import three.com.materialdesignexample.Models.News;
+import three.com.materialdesignexample.R;
 import three.com.materialdesignexample.Util.HttpUtil;
 
 /**
@@ -26,7 +29,7 @@ public class DrawerLayoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drawerlayout);
+        setContentView(R.layout.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -49,7 +52,7 @@ public class DrawerLayoutActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.school_news:
-                                switchToExample();
+                                switchToNews();
                                 break;
                             case R.id.navigation_item_blog:
                                 switchToBlog();
@@ -66,11 +69,21 @@ public class DrawerLayoutActivity extends AppCompatActivity {
                 });
     }
 
-    private void switchToExample() {
+    private void switchToNews() {
         getSupportFragmentManager().beginTransaction().replace(R.id.news_fragment, new NewsFramgment()).commit();
-        if(HttpUtil.dataset.size()==0){
+        if(HttpUtil.datamap.values().size()==0){
             showProgressDialog();
-            HttpUtil.getHtmlUtil(this);
+            HttpUtil.getHtmlUtil(this, News.NEWS_INDEX, News.TITLE, new CallBack() {
+                @Override
+                public void onStart() {
+                    showProgressDialog();
+                }
+
+                @Override
+                public void onFinsh() {
+                    closeProgressDialog();
+                }
+            });
             toolbar.setTitle(R.string.school_news);
         }
     }
@@ -86,7 +99,7 @@ public class DrawerLayoutActivity extends AppCompatActivity {
 //        mToolbar.setTitle(R.string.navigation_about);
     }
 
-    public void showProgressDialog() {
+    public  void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("正在加载...");
@@ -95,5 +108,9 @@ public class DrawerLayoutActivity extends AppCompatActivity {
         progressDialog.show();
     }
 
-
+    private  void closeProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+    }
 }

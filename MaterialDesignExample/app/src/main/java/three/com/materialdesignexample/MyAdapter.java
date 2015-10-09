@@ -1,6 +1,6 @@
 package three.com.materialdesignexample;
 
-import android.support.design.widget.Snackbar;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +9,20 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import three.com.materialdesignexample.Activity.NewsActivity;
 import three.com.materialdesignexample.Models.News;
 
 /**
  * Created by Administrator on 2015/10/8.
  */
 public class MyAdapter extends RecyclerView.Adapter {
-    private ArrayList<News> dataset;
 
-    public MyAdapter(ArrayList<News> dataset) {
+    private ArrayList<News> dataset;
+    public static Context context;
+
+    public MyAdapter(ArrayList<News> dataset,Context context) {
         this.dataset=dataset;
+        this.context=context;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class MyAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         ViewHolder mvh = (ViewHolder) viewHolder;
         mvh.textView.setText(dataset.get(i).getTitle());
-
+        viewHolder.itemView.setTag(dataset.get(i));
     }
 
     @Override
@@ -51,7 +55,9 @@ public class MyAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-            Snackbar.make(v,textView.getText(),Snackbar.LENGTH_SHORT).show();
+            NewsActivity.startNewsActivity(context, (News) v.getTag());
         }
     }
+
+
 }
