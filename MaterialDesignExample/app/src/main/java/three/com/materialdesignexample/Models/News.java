@@ -9,10 +9,6 @@ public class News  {
     private String title="";
     private String content="";
 
-    public static final int TITLE=0;
-
-    public static final int CONTENT=1;
-
     public  static String INDEX="http://www.kyren.net";
 
     public  static String NEWS_INDEX="http://www.kyren.net/Category_17/Index.aspx";

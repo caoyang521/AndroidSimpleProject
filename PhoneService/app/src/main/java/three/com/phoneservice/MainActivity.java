@@ -55,13 +55,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.startbtn:
                 Intent startIntent=new Intent(this,PhoneServer.class);
                 bindService(startIntent,serviceConnection,BIND_AUTO_CREATE);
-                //startService(startIntent);
+                startService(startIntent);
                 break;
             case R.id.stopbtn:
-                //Intent stopIntent=new Intent(MainActivity.this,PhoneServer.class);
+                Intent stopIntent=new Intent(MainActivity.this,PhoneServer.class);
                 if(serviceConnection!=null)
                     unbindService(serviceConnection);
-                //stopService(stopIntent);
+                stopService(stopIntent);
                 break;
             default:
                 break;

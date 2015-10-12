@@ -16,6 +16,8 @@ import android.webkit.WebView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+
 import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.Models.News;
 import three.com.materialdesignexample.R;
@@ -44,19 +46,36 @@ public class NewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_activity);
         initView();
-        HttpUtil.getHtmlUtil(this, mNews.getPath(), News.CONTENT, new CallBack() {
+        HttpUtil.getHtmlUtil(this, mNews.getPath(), new CallBack() {
             @Override
             public void onStart() {
                 showProgressDialog();
             }
 
             @Override
-            public void onFinsh() {
+            public void onFinsh(String response) {
+                HttpUtil.parseContentData(response);
                 closeProgressDialog();
                 newsTv.setText(mNews.getContent());
+                HttpUtil.handleNewsHtmlStr(response, new CallBack() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onFinsh(String response) {
+
+                        loadWebView(newsWebView, response);
+                    }
+                });
             }
-        });
+        }, Request.Method.GET,null,null);
         newsTv.setText(mNews.getContent());
+    }
+
+    private void loadWebView(final WebView newsWebView, String htmlStr) {
+        newsWebView.loadData(htmlStr, "text/html; charset=utf-8", "utf-8");
     }
 
     private void initView() {
@@ -77,6 +96,12 @@ public class NewsActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3b8dff")));
         actionBar.setTitle("新闻");
         //actionBar.setSubtitle(data.getDate());
+
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("正在加载...");
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
     }
 
     @Override
@@ -108,11 +133,6 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     public  void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("正在加载...");
-            progressDialog.setCanceledOnTouchOutside(false);
-        }
         progressDialog.show();
     }
 

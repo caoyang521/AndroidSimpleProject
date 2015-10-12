@@ -20,7 +20,11 @@
         </activity>
 
         <service
-            android:name="three.com.phoneservice.PhoneServer" />
+            android:name="three.com.phoneservice.PhoneServer">
+            <intent-filter android:priority="1000">
+                <action android:name="three.com.phoneservice.PhoneServer" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

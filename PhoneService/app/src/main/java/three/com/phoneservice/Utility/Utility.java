@@ -37,7 +37,7 @@ public class Utility {
             {
                 PeopleInfo peopleInfo =new PeopleInfo();
                 peopleInfo.setName("张特");
-                peopleInfo.setNumber("13967860592");
+                peopleInfo.setNumber("60018867809125");
                 db.savePerson(peopleInfo);
 
             }

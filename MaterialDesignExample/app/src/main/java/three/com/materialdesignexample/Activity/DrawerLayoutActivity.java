@@ -7,7 +7,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import com.android.volley.Request;
 
 import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.Framgment.NewsFramgment;
@@ -26,6 +31,26 @@ public class DrawerLayoutActivity extends AppCompatActivity {
     private NavigationView navigationView=null;
     public static ProgressDialog progressDialog=null;
 
+    private void test(){
+        Button testbtn= (Button) findViewById(R.id.testbtn);
+        testbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HttpUtil.test(DrawerLayoutActivity.this, "http://10.22.151.40/scripts/login.exe/getPassport?"
+                        , new CallBack() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onFinsh(String response) {
+                        Log.d("Tag",response);
+                    }
+                });
+            }
+        });
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +67,7 @@ public class DrawerLayoutActivity extends AppCompatActivity {
 
         navigationView= (NavigationView) findViewById(R.id.navigation_view);
         setupDrawerContent(navigationView);
+        test();
     }
 
     //设置NavigationView点击事件
@@ -73,17 +99,18 @@ public class DrawerLayoutActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.news_fragment, new NewsFramgment()).commit();
         if(HttpUtil.datamap.values().size()==0){
             showProgressDialog();
-            HttpUtil.getHtmlUtil(this, News.NEWS_INDEX, News.TITLE, new CallBack() {
+            HttpUtil.getHtmlUtil(this, News.NEWS_INDEX, new CallBack() {
                 @Override
                 public void onStart() {
                     showProgressDialog();
                 }
 
                 @Override
-                public void onFinsh() {
+                public void onFinsh(String response) {
+                    HttpUtil.parseTitleData(response);
                     closeProgressDialog();
                 }
-            });
+            }, Request.Method.GET,null,null);
             toolbar.setTitle(R.string.school_news);
         }
     }

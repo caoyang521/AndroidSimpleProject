@@ -10,8 +10,6 @@ import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -77,6 +75,7 @@ public class PhoneServer extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        flags=START_STICKY;
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -139,31 +138,31 @@ public class PhoneServer extends Service{
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        // 设置悬浮窗的Touch监听
-        btn_floatView.setOnTouchListener(new View.OnTouchListener() {
-            int lastX, lastY;
-            int paramX, paramY;
-
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        paramX = params.x;
-                        paramY = params.y;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        int dx = (int) event.getRawX() - lastX;
-                        int dy = (int) event.getRawY() - lastY;
-                        params.x = paramX + dx;
-                        params.y = paramY + dy;
-                        // 更新悬浮窗位置
-                        wm.updateViewLayout(btn_floatView, params);
-                        break;
-                }
-                return true;
-            }
-        });
+//        // 设置悬浮窗的Touch监听
+//        btn_floatView.setOnTouchListener(new View.OnTouchListener() {
+//            int lastX, lastY;
+//            int paramX, paramY;
+//
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch(event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        lastX = (int) event.getRawX();
+//                        lastY = (int) event.getRawY();
+//                        paramX = params.x;
+//                        paramY = params.y;
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        int dx = (int) event.getRawX() - lastX;
+//                        int dy = (int) event.getRawY() - lastY;
+//                        params.x = paramX + dx;
+//                        params.y = paramY + dy;
+//                        // 更新悬浮窗位置
+//                        wm.updateViewLayout(btn_floatView, params);
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
 
         wm.addView(btn_floatView, params);
         isAdded = true;
