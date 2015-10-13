@@ -238,7 +238,7 @@ public class SecurityCodeHelper {
         SecurityCodeHelper ins = new SecurityCodeHelper();
 
         // 第1步，下载验证码到DOWNLOAD_DIR
-        ins.downloadImage();
+        //ins.downloadImage();
 
         // 第2步，去除干扰的像素
         File dir = new File(DOWNLOAD_DIR);
@@ -263,7 +263,7 @@ public class SecurityCodeHelper {
         // 打开资源管理器，选择TRAIN_DIR，分别找出显示0-9数字的文件，以它的名字重新命名，删除其它所有的。
 
         // 第7步，测试判断效果，运行后打开RESULT_DIR，检查文件名是否与验证码内容一致。
-        //ins.testDownloadImage();
+        ins.testDownloadImage();
 
         // 第8步，提供给外界接口调用。
         String validateCode = SecurityCodeHelper.getValidateCode(new File(DOWNLOAD_DIR, "0.png"));
