@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import three.com.phoneservice.Db.Db;
+import three.com.phoneservice.MainActivity;
 import three.com.phoneservice.Model.PeopleInfo;
 
 /**
@@ -37,7 +38,7 @@ public class Utility {
             {
                 PeopleInfo peopleInfo =new PeopleInfo();
                 peopleInfo.setName("张特");
-                peopleInfo.setNumber("60018867809125");
+                peopleInfo.setNumber("13958839460");
                 db.savePerson(peopleInfo);
 
             }
@@ -55,6 +56,7 @@ public class Utility {
 //                db.savePerson(peopleInfo);
 //            }
             Log.i("test","emd");
+            MainActivity.isSendHttpRequest=true;
             isover=true;
         }catch(Exception e){
             e.printStackTrace();

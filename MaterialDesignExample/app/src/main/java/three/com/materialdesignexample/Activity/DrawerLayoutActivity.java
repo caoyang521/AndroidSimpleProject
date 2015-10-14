@@ -1,8 +1,10 @@
 package three.com.materialdesignexample.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +38,7 @@ public class DrawerLayoutActivity extends AppCompatActivity {
         testbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HttpUtil.test(DrawerLayoutActivity.this, "http://10.22.151.40/scripts/login.exe/getPassport?"
+                HttpUtil.test(DrawerLayoutActivity.this
                         , new CallBack() {
                     @Override
                     public void onStart() {
@@ -68,6 +70,12 @@ public class DrawerLayoutActivity extends AppCompatActivity {
         navigationView= (NavigationView) findViewById(R.id.navigation_view);
         setupDrawerContent(navigationView);
         test();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     //设置NavigationView点击事件

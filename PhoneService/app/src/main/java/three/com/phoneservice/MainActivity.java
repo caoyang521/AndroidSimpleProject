@@ -22,14 +22,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button stopbtn=null;
     private PhoneServer.MyBinder myBinder=null;
     private Db db=null;
+    public static boolean isSendHttpRequest=false;
 
     private ServiceConnection serviceConnection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             myBinder= (PhoneServer.MyBinder) service;
-            myBinder.getDb(textView, db,MainActivity.this);
-            HttpUtility.sendHttpRequest(db);
-        }
+            myBinder.getDb(db);
+            if(isSendHttpRequest)
+                HttpUtility.sendHttpRequest(db);
+    }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -58,10 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startService(startIntent);
                 break;
             case R.id.stopbtn:
-                Intent stopIntent=new Intent(MainActivity.this,PhoneServer.class);
+                //Intent stopIntent=new Intent(MainActivity.this,PhoneServer.class);
                 if(serviceConnection!=null)
                     unbindService(serviceConnection);
-                stopService(stopIntent);
+                //stopService(stopIntent);
                 break;
             default:
                 break;

@@ -24,12 +24,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.Framgment.NewsFramgment;
+import three.com.materialdesignexample.JsHelper.HexMd5;
 import three.com.materialdesignexample.Models.News;
 import three.com.materialdesignexample.MyAdapter;
 
@@ -225,53 +227,53 @@ public class HttpUtil  {
             }
         }.execute(htmlStr);
     }
+    public static String userName="";
+    public static String password="";
+    public static String passport="";
+    public static void login(final Context context, final CallBack callBack) throws Exception {
 
-    public static void login(final Context context, final String url, final CallBack callBack,
-                             final Map<String, String> params) {
+        String LoginId="";
 
-        Map<String, String> header = new HashMap<String, String>();
+        String Digest="";
+        String plainText="";
 
+        List<String> loginCookie=null;
+       // loginCookie= SecurityCodeHelper.getLoginCookie(userName);
+
+        LoginId=getLoginId(loginCookie.get(0));
+        cookie=loginCookie.get(1);
+        //passport= SecurityCodeHelper.getSafeCode(loginCookie.get(2), cookie);
+
+        plainText=userName+LoginId+password+passport;
+        Digest= HexMd5.getMD5(plainText);
+        Log.d("TAG", "next url");
+        Map<String, String> newHeader = new HashMap<String, String>();
         //设置referer
-        header.put("Referer", "http://10.22.151.40/");
+        newHeader.put("Referer", "http://10.22.151.40/scripts/login.exe/getPassport?");
+        //必须设置cookie
+        newHeader.put("Cookie", cookie);
 
-        header.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10240");
-        //验证密码
-        getHtmlUtil(context, url, new CallBack() {
-                    @Override
-                    public void onStart() {
+        newHeader.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10240");
 
-                    }
+        Map<String, String> params=new HashMap<String, String>();
+        params.put("UserName",userName);
+        params.put("Digest",Digest);
+        getHtmlUtil(context, "http://10.22.151.40/scripts/login.exe/login?",
+                callBack, Request.Method.POST, newHeader, params);
 
-                    @Override
-                    public void onFinsh(String response) {
 
-                        String LoginId=getLoginId(response);
 
-                        Log.d("TAG", "next url");
-                        Map<String, String> newHeader = new HashMap<String, String>();
-                        //设置referer
-                        newHeader.put("Referer", "http://10.22.151.40/scripts/login.exe/getPassport?");
-                        //必须设置cookie
-                        newHeader.put("Cookie", cookie);
-
-                        newHeader.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10240");
-
-                        getHtmlUtil(context, "http://10.22.151.40/scripts/login.exe/login?",
-                                callBack, Request.Method.POST, newHeader, params);
-                    }
-                },
-                Request.Method.POST,
-                header,
-                params);
     }
 
 
-    public static void test(final Context context, final String url, final CallBack callBack)
+    public static void test(final Context context, final CallBack callBack)
     {
-        Map<String, String> params=new HashMap<String, String>();
-        params.put("UserName","144173551");
-        params.put("password","18291829a");
-        login(context, url, callBack, params);
+
+        try {
+            login(context, callBack);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static String getLoginId(String response){

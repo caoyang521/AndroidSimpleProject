@@ -12,7 +12,6 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import three.com.phoneservice.Db.Db;
@@ -42,13 +41,9 @@ public class PhoneServer extends Service{
                 switch (state)
                 {
                     case TelephonyManager.CALL_STATE_IDLE:
+                        remeView();
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK:
-                        if(btn_floatView != null)
-                        {
-                            //移除悬浮窗口
-                            wm.removeView(btn_floatView);
-                        }
                         break;
                     case TelephonyManager.CALL_STATE_RINGING:
                         Log.d("My Service", number);
@@ -85,15 +80,10 @@ public class PhoneServer extends Service{
         return myBinder;
     }
 
-    private TextView textView=null;
-    private Context context=null;
-
     class MyBinder extends Binder {
 
-        public void getDb(TextView mytextView,Db mdb,Context mcontext){
-            textView=mytextView;
+        public void getDb(Db mdb){
             db=mdb;
-            context=mcontext;
         }
     }
 
@@ -138,33 +128,17 @@ public class PhoneServer extends Service{
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-//        // 设置悬浮窗的Touch监听
-//        btn_floatView.setOnTouchListener(new View.OnTouchListener() {
-//            int lastX, lastY;
-//            int paramX, paramY;
-//
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch(event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        lastX = (int) event.getRawX();
-//                        lastY = (int) event.getRawY();
-//                        paramX = params.x;
-//                        paramY = params.y;
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        int dx = (int) event.getRawX() - lastX;
-//                        int dy = (int) event.getRawY() - lastY;
-//                        params.x = paramX + dx;
-//                        params.y = paramY + dy;
-//                        // 更新悬浮窗位置
-//                        wm.updateViewLayout(btn_floatView, params);
-//                        break;
-//                }
-//                return true;
-//            }
-//        });
-
         wm.addView(btn_floatView, params);
         isAdded = true;
+    }
+
+
+    private void remeView(){
+        Log.d("TAG","OFF");
+        if(btn_floatView != null)
+        {
+            //移除悬浮窗口
+            wm.removeView(btn_floatView);
+        }
     }
 }

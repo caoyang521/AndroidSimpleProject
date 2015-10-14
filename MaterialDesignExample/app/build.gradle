@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    useLibrary 'org.apache.http.legacy'
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
@@ -10,6 +11,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -17,13 +19,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile 'org.apache.httpcomponents:httpclient:4.5'
+    compile 'org.apache.httpcomponents:httpcore:4.4'
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.0.+'
-    compile files('libs/jsoup-1.8.3.jar')
-    compile files('libs/volley.jar')
+    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'org.jsoup:jsoup:1.7.2'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
+
 }

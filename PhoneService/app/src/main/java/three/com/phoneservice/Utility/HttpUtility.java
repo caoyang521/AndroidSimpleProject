@@ -15,7 +15,7 @@ import three.com.phoneservice.Db.Db;
  */
 public class HttpUtility {
 
-    static final String address ="http://10.22.149.173/android/GetAllstudenttelephone.aspx";
+    static final String address ="http://Xg.ndky.edu.cn/android/GetAllstudenttelephone.aspx";
     static StringBuilder response = new StringBuilder("");
 
     public static void sendHttpRequest(final Db db){
