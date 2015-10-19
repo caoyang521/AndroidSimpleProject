@@ -19,18 +19,11 @@
             android:layout_alignParentTop="true"
             android:background="#3b8dff">
         </android.support.v7.widget.Toolbar>
-        <Button
-            android:id="@+id/testbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="点我"/>
         <FrameLayout
-            android:id="@+id/news_fragment"
-            android:name="three.com.materialdesignexample.Framgment.NewsFramgment"
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:layout="@layout/new_title_list" />
+            />
     </LinearLayout>
 
     <android.support.design.widget.NavigationView

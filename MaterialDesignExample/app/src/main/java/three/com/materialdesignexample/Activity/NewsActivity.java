@@ -70,7 +70,7 @@ public class NewsActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, Request.Method.GET,null,null);
+        }, Request.Method.GET,null);
         newsTv.setText(mNews.getContent());
     }
 

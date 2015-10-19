@@ -16,7 +16,7 @@
             android:name=".Activity.NewsActivity"
             android:theme="@style/AppCompatActivityTheme">
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

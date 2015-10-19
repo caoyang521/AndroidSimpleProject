@@ -1,4 +1,4 @@
-package three.com.materialdesignexample;
+package three.com.materialdesignexample.Util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +18,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.InputStream;
@@ -25,18 +26,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2015/10/14.
  */
-public class SafeCodeHelp {
+public class SafeCodeUtil {
 
     private static Bitmap codeBitmap;
 
     private static StringBuilder cookie=new StringBuilder();
     private static String url;
 
-    static Bitmap getSafeCodePic(){
+    public static Bitmap getSafeCodePic(){
         try {
 
             //******** 取得的是InputStream，直接从InputStream生成bitmap ***********/
@@ -50,6 +53,7 @@ public class SafeCodeHelp {
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     private static InputStream getImageStream() throws Exception {
 
         HttpClient httpClient = new DefaultHttpClient();
@@ -70,6 +74,7 @@ public class SafeCodeHelp {
 
     }
 
+    @SuppressWarnings("deprecation")
     public static void getLoginCookie(final String username){
 
         final String url = "http://10.22.151.40/scripts/login.exe/getPassport?";
@@ -89,6 +94,8 @@ public class SafeCodeHelp {
                 content = EntityUtils.toString(response.getEntity(), "GBK");
                 // 获取url
                 getUrl(content);
+                // 获取loginId
+                HttpUtil.LoginId=getLoginId(content);
                 // get cookieStore
                 CookieStore cookieStore = httpClient.getCookieStore();
                 // get Cookies
@@ -98,7 +105,7 @@ public class SafeCodeHelp {
                     cookie.append(cookies.get(0).getValue());
                     cookie.append(";LOGINID=");
                     cookie.append(cookies.get(1).getValue());
-
+                    HttpUtil.cookie=cookie.toString();
                 }
                 else {
                     Log.d("TAG","获取Cookie失败");
@@ -121,5 +128,24 @@ public class SafeCodeHelp {
 
         url="http://10.22.151.40/scripts/login.exe/stamp?id="+ URLEncoder.encode(url.substring(28), "UTF-8");
 
+    }
+
+    private static String getLoginId(String response){
+        Document doc = Jsoup.parse(response);
+        Elements Elements = doc.select("script");
+        Element jsElements = Elements.get(1);
+
+        Pattern pattern = Pattern.compile("\"\\{.*\\}\"");
+        Matcher matcher = pattern.matcher(jsElements.toString());
+        String findid = null;
+        if (matcher.find()) {
+            findid = matcher.group();
+            Log.d("TAG", matcher.group());
+        }
+
+        String loginID = findid.substring(1, findid.length() - 1);
+        Log.d("TAG", loginID);
+
+        return  loginID;
     }
 }

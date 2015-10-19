@@ -1,4 +1,4 @@
-package three.com.materialdesignexample;
+package three.com.materialdesignexample.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,23 +11,24 @@ import java.util.ArrayList;
 
 import three.com.materialdesignexample.Activity.NewsActivity;
 import three.com.materialdesignexample.Models.News;
+import three.com.materialdesignexample.R;
 
 /**
  * Created by Administrator on 2015/10/8.
  */
-public class MyAdapter extends RecyclerView.Adapter {
+public class NewsAdapter extends RecyclerView.Adapter {
 
     private ArrayList<News> dataset;
     public static Context context;
 
-    public MyAdapter(ArrayList<News> dataset,Context context) {
+    public NewsAdapter(ArrayList<News> dataset, Context context) {
         this.dataset=dataset;
         this.context=context;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_layout,viewGroup,false);
+        View v= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.news_item_layout,viewGroup,false);
         ViewHolder vh=new ViewHolder(v);
         return vh;
     }

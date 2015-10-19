@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import three.com.materialdesignexample.ItemDivider;
 import three.com.materialdesignexample.Models.News;
-import three.com.materialdesignexample.MyAdapter;
+import three.com.materialdesignexample.Adapter.NewsAdapter;
 import three.com.materialdesignexample.R;
 import three.com.materialdesignexample.Util.HttpUtil;
 
@@ -24,7 +24,7 @@ public class NewsFramgment extends Fragment {
 
     public static RecyclerView recyclerView=null;
     private RecyclerView.LayoutManager layoutManager=null;
-    public static MyAdapter adapter=null;
+    public static NewsAdapter adapter=null;
 
     @Nullable
     @Override
@@ -35,7 +35,7 @@ public class NewsFramgment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager=new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        adapter=new MyAdapter(new ArrayList<News>(HttpUtil.datamap.values()),getActivity());
+        adapter=new NewsAdapter(new ArrayList<News>(HttpUtil.datamap.values()),getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new ItemDivider());
 
