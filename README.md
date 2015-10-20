@@ -23,7 +23,7 @@ ListView当中放置多种类型的布局，并设定item事件
 
 ## MaterialDesignExample
 
-MaterialDesignDemo 关于RecyclerView和Drawerlayout  目前正在基于这个项目开发一个校园App
+MaterialDesignDemo 关于RecyclerView和Drawerlayout  目前正在基于这个项目开发一个校园App.拥有基本功能，校园新闻和查课表
 
 ## RecyclerViewSample
 
