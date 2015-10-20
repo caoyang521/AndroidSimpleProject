@@ -11,8 +11,9 @@ public class Course {
     private String Teacher;
     private String Classroom;
     private String Time;
-
-
+    private int Id;
+    private String Category;
+    private int Count;
 
     public String getCategory() {
         return Category;
@@ -21,8 +22,6 @@ public class Course {
     public void setCategory(String category) {
         Category = category;
     }
-
-    private String Category;
 
     public String getClassroom() {
         return Classroom;
@@ -70,5 +69,21 @@ public class Course {
 
     public void setTime(String time) {
         Time = time;
+    }
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public int getCount() {
+        return Count;
+    }
+
+    public void setCount(int count) {
+        Count = count;
     }
 }

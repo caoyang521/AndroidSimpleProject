@@ -21,8 +21,10 @@ import java.util.List;
 
 import three.com.materialdesignexample.Adapter.CourseAdapter;
 import three.com.materialdesignexample.CallBack;
+import three.com.materialdesignexample.Db.Db;
 import three.com.materialdesignexample.Models.Course;
 import three.com.materialdesignexample.R;
+import three.com.materialdesignexample.Util.HandleResponseUtil;
 import three.com.materialdesignexample.Util.HttpUtil;
 
 /**
@@ -34,7 +36,7 @@ public class CourseFramgment extends Fragment {
     private PagerSlidingTabStrip tabs=null;
     private ViewPagerAdapter vpAdapter=null;
     private Button requestCourse=null;
-    private List<List<Course>> data= HttpUtil.courseData;
+    private List<List<Course>> data= HandleResponseUtil.courseData;
     private ProgressDialog progressDialog;
     LinearLayout emptyLayout=null;
 
@@ -47,12 +49,26 @@ public class CourseFramgment extends Fragment {
         requestCourse= (Button) view.findViewById(R.id.import_btn);
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
 
+        if(data.size()==0){
+            if(HandleResponseUtil.db==null){
+                HandleResponseUtil.db= Db.getInstance(getActivity());
+            }
+            if(HandleResponseUtil.db!=null){
+                if(HandleResponseUtil.db.loadCourse()){
+                    initViewPage();
+                }
+            }
+        }
+        else
+            initViewPage();
+        
         requestCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HttpUtil.getCourseHtml(getActivity(), new CallBack() {
                     @Override
                     public void onStart() {
+
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -82,6 +98,7 @@ public class CourseFramgment extends Fragment {
     private void initViewPage(){
         //ViewPager init
         vpAdapter= new ViewPagerAdapter(getActivity(),data);
+
         pager.setAdapter(vpAdapter);
         // Bind the tabs to the ViewPager
         tabs.setViewPager(pager);
@@ -95,7 +112,7 @@ public class CourseFramgment extends Fragment {
 
     public static CourseAdapter courseAdapter;
 
-    private ListView getDateListView(Context context, List<Course> list, List<List<Course>> data) {
+    private ListView getDateListView(Context context, List<Course> list) {
 
         courseAdapter=new CourseAdapter(context, list);
         ListView coursesList = new ListView(context);
@@ -165,7 +182,7 @@ public class CourseFramgment extends Fragment {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
-            ListView listView = getDateListView(context, data.get(position), data);
+            ListView listView = getDateListView(context, data.get(position));
             container.addView(listView);
             return listView;
 

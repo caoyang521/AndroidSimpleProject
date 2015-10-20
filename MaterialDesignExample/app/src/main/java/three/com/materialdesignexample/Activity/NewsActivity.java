@@ -19,8 +19,10 @@ import android.widget.TextView;
 import com.android.volley.Request;
 
 import three.com.materialdesignexample.CallBack;
+import three.com.materialdesignexample.Db.Db;
 import three.com.materialdesignexample.Models.News;
 import three.com.materialdesignexample.R;
+import three.com.materialdesignexample.Util.HandleResponseUtil;
 import three.com.materialdesignexample.Util.HttpUtil;
 
 /**
@@ -54,13 +56,13 @@ public class NewsActivity extends AppCompatActivity {
 
             @Override
             public void onFinsh(String response) {
-                HttpUtil.parseContentData(response);
+                HandleResponseUtil.parseContentData(response);
                 closeProgressDialog();
                 newsTv.setText(mNews.getContent());
-                HttpUtil.handleNewsHtmlStr(response, new CallBack() {
+                HandleResponseUtil.handleNewsHtmlStr(response, new CallBack() {
                     @Override
                     public void onStart() {
-
+                        HandleResponseUtil.db= Db.getInstance(NewsActivity.this);
                     }
 
                     @Override

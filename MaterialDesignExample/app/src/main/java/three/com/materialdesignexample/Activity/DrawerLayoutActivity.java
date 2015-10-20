@@ -18,6 +18,7 @@ import three.com.materialdesignexample.Framgment.CourseFramgment;
 import three.com.materialdesignexample.Framgment.NewsFramgment;
 import three.com.materialdesignexample.Models.News;
 import three.com.materialdesignexample.R;
+import three.com.materialdesignexample.Util.HandleResponseUtil;
 import three.com.materialdesignexample.Util.HttpUtil;
 
 /**
@@ -29,7 +30,7 @@ public class DrawerLayoutActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout=null;
     private ActionBarDrawerToggle drawerToggle=null;
     private NavigationView navigationView=null;
-    public static ProgressDialog progressDialog=null;
+    public  ProgressDialog progressDialog=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class DrawerLayoutActivity extends AppCompatActivity {
 
                 @Override
                 public void onFinsh(String response) {
-                    HttpUtil.parseTitleData(response);
+                    HandleResponseUtil.parseTitleData(response);
                     closeProgressDialog();
                 }
             }, Request.Method.GET,null);

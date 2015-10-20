@@ -2,18 +2,22 @@ package three.com.materialdesignexample.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.R;
-import three.com.materialdesignexample.Util.SafeCodeUtil;
 import three.com.materialdesignexample.Util.HttpUtil;
+import three.com.materialdesignexample.Util.SafeCodeUtil;
 
 /**
  * Created by Administrator on 2015/10/14.
@@ -25,10 +29,13 @@ public class LoginActivity extends Activity{
     private Button loginbtn=null;
     private Button safecodebtn=null;
     private ImageView codeimg=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
+
+        isCookieGet() ;
 
         loginuser= (EditText) findViewById(R.id.loginid_et);
         loginpass= (EditText) findViewById(R.id.loginpswd_et);
@@ -79,6 +86,17 @@ public class LoginActivity extends Activity{
             }
         });
     }
+
+    private void isCookieGet() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getBoolean("cookie_OK", false)) {
+            HttpUtil.cookie=prefs.getString("cookie",null);
+            Intent intent = new Intent(this, DrawerLayoutActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     private String user="";
     private String pass="";
     private String passport="";
@@ -98,10 +116,37 @@ public class LoginActivity extends Activity{
             HttpUtil.userName=user;
             HttpUtil.password=pass;
             HttpUtil.passport=passport;
-            Intent intent =new Intent(LoginActivity.this, DrawerLayoutActivity.class);
-            startActivity(intent);
-            finish();
+            HttpUtil.login(new CallBack() {
+                @Override
+                public void onStart() {
+                    saveCookie();
+                    Log.d("TAG","获取cookie成功");
+                    Intent intent = new Intent(LoginActivity.this, DrawerLayoutActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
 
+                @Override
+                public void onFinsh(String response) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialog.Builder(LoginActivity.this)
+                                    .setTitle("善意的提醒")
+                                    .setPositiveButton("确定", null)
+                                    .setMessage("登陆失败,请确保账号密码输入正确,和在校园网下登陆")
+                                    .show();
+                        }
+                    });
+                }
+            });
         }
+    }
+    private void saveCookie(){
+
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putBoolean("cookie_OK", true);
+        editor.putString("cookie",HttpUtil.cookie);
+        editor.commit();
     }
 }

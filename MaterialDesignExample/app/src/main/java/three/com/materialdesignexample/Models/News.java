@@ -8,6 +8,7 @@ public class News  {
     private String path="";
     private String title="";
     private String content="";
+    private int Id;
 
     public  static String INDEX="http://www.kyren.net";
 
@@ -35,5 +36,13 @@ public class News  {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
     }
 }

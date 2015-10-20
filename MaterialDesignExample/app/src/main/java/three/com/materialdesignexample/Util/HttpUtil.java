@@ -1,8 +1,6 @@
 package three.com.materialdesignexample.Util;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -23,10 +21,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -35,14 +29,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import three.com.materialdesignexample.Adapter.NewsAdapter;
 import three.com.materialdesignexample.CallBack;
-import three.com.materialdesignexample.Framgment.NewsFramgment;
 import three.com.materialdesignexample.JsHelper.HexMd5;
-import three.com.materialdesignexample.Models.Course;
 import three.com.materialdesignexample.Models.News;
 
 /**
@@ -58,9 +47,13 @@ public class HttpUtil  {
 
     public static String cookie="";
 
+    private static Context mcontext;
+
     public static void getHtmlUtil( Context context,String url, final CallBack callBack,final int method,
                                     final Map<String, String> headers
                                     ){
+
+        mcontext=context;
 
         StringRequest stringRequest = null;
 
@@ -125,85 +118,7 @@ public class HttpUtil  {
 
     }
 
-    public static void parseTitleData(String response){
 
-        if (response!=null&&!"".equals(response)) {
-            Document doc = Jsoup.parse(response);
-            Elements linksElements = doc.select("div[class=article_list mtop10]>ul>li>a");
-            // class为“article_list mtop10”的div里面ul里面li里面a标签
-            for (Element ele:linksElements) {
-                String href = ele.attr("href");
-                String title = ele.text();
-                News news =new News();
-                news.setPath(href);
-                news.setTitle(title);
-                datamap.put(news.getPath(), news);
-            }
-            NewsFramgment.adapter=new NewsAdapter(new ArrayList<News>(datamap.values()), NewsAdapter.context);
-            NewsFramgment.recyclerView.setAdapter(NewsFramgment.adapter);
-            NewsFramgment.adapter.notifyDataSetChanged();
-        }
-    }
-
-    public static void parseContentData(String response){
-
-        if (response!=null&&!"".equals(response)) {
-            Document document = Jsoup.parse(response);
-            Elements pElements =  pElements = document.select("p");
-
-            StringBuilder sb = new StringBuilder();
-            for (Element e : pElements) {
-                String str = e.text();
-                sb.append(str + "\n");
-            }
-            datamap.get(path).setContent(sb.toString());
-        }
-    }
-
-    public static void handleNewsHtmlStr(String htmlStr, final CallBack callback) {
-
-        new AsyncTask<String, Integer, String>() {
-
-            @Override
-            protected String doInBackground(String... params) {
-
-                String result = "";
-                try {
-                    Document document = Jsoup.parse(params[0]);
-                    Elements pElements = document.select("div[class=article_content]");
-
-                    Elements pngs = document.select("img[src]");
-                    for (Element element : pngs) {
-                        String imgUrl = element.attr("src");
-                        if (imgUrl.trim().startsWith("/")) {
-                            imgUrl = News.INDEX + imgUrl;
-                            element.attr("src", imgUrl);
-                        }
-                    }
-
-                    Elements iElements=null;
-                    StringBuilder sb = new StringBuilder();
-                    for (Element e : pElements) {
-                        String str = e.html();
-                        sb.append(str + "\n");
-                    }
-                    result = sb.toString();
-
-                } catch (Exception e) {
-                    result = "";
-                    Log.d("winson", "解析错误： " + e);
-                }
-
-                return result;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                callback.onFinsh(s);
-            }
-        }.execute(htmlStr);
-    }
     public static String userName="";
     public static String password="";
     public static String passport="";
@@ -233,9 +148,9 @@ public class HttpUtil  {
     @SuppressWarnings("deprecation")
     public static void getCourseHtml(final Context context, final CallBack callBack)
     {
-        login(new CallBack() {
+        new Thread(new Runnable() {
             @Override
-            public void onStart() {
+            public void run() {
                 callBack.onStart();
                 String url = "http://10.22.151.40/scripts/wzw_jspk.asp?WHO=" + "144173551" + "&year=2014&term=2&STUDENTNAME=" + "张坚";
                 try {
@@ -259,195 +174,15 @@ public class HttpUtil  {
 
                     @Override
                     public void onFinsh(String response) {
-                        handleCourseHtmlStr(response, callBack);
-
+                        HandleResponseUtil.handleCourseHtmlStr(response, callBack);
                     }
                 }, Request.Method.GET, headers);
             }
+        }).start();
 
-            @Override
-            public void onFinsh(String response) {
-
-            }
-        });
     }
 
-    public static ArrayList<List<Course>> courseData=new ArrayList<List<Course>>();
-    public static void handleCourseHtmlStr(String htmlStr, final CallBack callback) {
 
-        new AsyncTask<String, Integer, Boolean>() {
-
-            @Override
-            protected Boolean doInBackground(String... params) {
-
-                Boolean result=false;
-                List<Course> list1 = new ArrayList<Course>();
-                List<Course> list2 = new ArrayList<Course>();
-                List<Course> list3 = new ArrayList<Course>();
-                List<Course> list4 = new ArrayList<Course>();
-                List<Course> list5 = new ArrayList<Course>();
-                List<Course> list6 = new ArrayList<Course>();
-                List<Course> list7 = new ArrayList<Course>();
-                int flag=0;
-                int flagcount=0;
-                String[] res = null;
-                try {
-                    Document document = Jsoup.parse(params[0]);
-                    Elements pElements = document.select("td[rowSpan=2] > font");
-                    for(int i=0;i<pElements.size();i++){
-                        Element e=pElements.get(i);
-                        int count=(i+1)%7;
-                        int timeCount=(i)/7;
-                        String response=  e.text();
-                        if(response.length()>120){
-                            if(flag==0){
-                                res= response.split("上课周次：111111111111111111");
-                                flag=res.length;
-                            }
-                            response=res[flagcount];
-                            flagcount++;
-                            if(flagcount<flag)
-                                i--;
-                            else{
-                                flagcount=0;
-                                flag=0;
-                            }
-                        }
-
-                        Course course =new Course();
-                        if(!TextUtils.isEmpty(response)){
-                            switch (timeCount){
-                                case 0:
-                                    course.setTime("1-2");
-                                    break;
-                                case 1:
-                                    course.setTime("3-4");
-                                    break;
-                                case 2:
-                                    course.setTime("5-6");
-                                    break;
-                                case 3:
-                                    course.setTime("7-8");
-                                    break;
-                                case 4:
-                                    course.setTime("9-10");
-                                    break;
-                                case 5:
-                                    course.setTime("11-12");
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            Pattern pattern = Pattern.compile("\\[+单?双?周?\\]+.*:");
-                            Matcher matcher = pattern.matcher(response);
-
-                            String find = null;
-                            if (matcher.find()) {
-                                find = matcher.group();
-                                Log.d("TAG", matcher.group());
-                            }
-                            String week = find.substring(0, 4);
-                            String name = find.substring(4, find.length() - 1);
-                            Log.d("TAG", name);
-                            course.setWeek(week);
-                            course.setCourseName(name);
-
-                            Pattern patternNum = Pattern.compile(":\\w*");
-                            Matcher matcherNum = patternNum.matcher(response);
-                            String findNum = null;
-                            if (matcherNum.find()) {
-                                findNum = matcherNum.group();
-                            }
-                            String number = findNum.substring(1);
-                            Log.d("TAG", number);
-                            course.setNumber(number);
-
-                            Pattern patternTea = Pattern.compile("：\\[\\D*\\] 课");
-                            Matcher matcherTea = patternTea.matcher(response);
-                            String findTea = null;
-                            if (matcherTea.find()) {
-                                findTea = matcherTea.group();
-                            }
-                            String teacher = findTea.substring(2,findTea.length()-3);
-                            Log.d("TAG", teacher);
-                            course.setTeacher(teacher);
-
-                            Pattern patternRoom = Pattern.compile("室：\\[.*\\]");
-                            Matcher matcherRoom = patternRoom.matcher(response);
-                            String findRoom = null;
-                            if (matcherRoom.find()) {
-                                findRoom = matcherRoom.group();
-                            }
-                            String room = findRoom.substring(3,findRoom.length()-1);
-                            Log.d("TAG", room);
-                            course.setClassroom(room);
-
-                            Pattern patternCate = Pattern.compile("别：\\[.*\\] 教");
-                            Matcher matcherCate = patternCate.matcher(response);
-                            String findCate = null;
-                            if (matcherCate.find()) {
-                                findCate = matcherCate.group();
-                            }
-                            String Cate = findCate.substring(3,findCate.length()-4);
-                            Log.d("TAG", Cate);
-                            course.setCategory(Cate);
-
-                        }
-                        if(course.getClassroom()!=null){
-                            switch (count){
-                                case 1:
-                                    list1.add(course);
-                                    break;
-                                case 2:
-                                    list2.add(course);
-                                    break;
-                                case 3:
-                                    list3.add(course);
-                                    break;
-                                case 4:
-                                    list4.add(course);
-                                    break;
-                                case 5:
-                                    list5.add(course);
-                                    break;
-                                case 6:
-                                    list6.add(course);
-                                    break;
-                                case 0:
-                                    list7.add(course);
-                                    break;
-                            }
-                        }
-                    }
-                    
-                    courseData.add(list1);
-                    courseData.add(list2);
-                    courseData.add(list3);
-                    courseData.add(list4);
-                    courseData.add(list5);
-                    courseData.add(list6);
-                    courseData.add(list7);
-
-                    result=true;
-                } catch (Exception e) {
-                    result=false;
-                    Log.d("winson", "解析错误： " + e);
-                }
-
-                return result;
-            }
-
-            @Override
-            protected void onPostExecute(Boolean result) {
-                super.onPostExecute(result);
-                if(result)
-                    callback.onFinsh("");
-                else
-                    Log.d("TAG","handle course failed");
-            }
-        }.execute(htmlStr);
-    }
 
     @SuppressWarnings("deprecation")
     public static void getLoginCookie(String Digest,CallBack callBack){
@@ -487,13 +222,16 @@ public class HttpUtil  {
                     callBack.onStart();
                 }
                 else {
+                    callBack.onFinsh(null);
                     Log.d("TAG","获取Cookie失败");
                 }
             }
         } catch (Exception e) {
+            callBack.onFinsh(null);
             e.printStackTrace();
         }
 
     }
+
 
 }
