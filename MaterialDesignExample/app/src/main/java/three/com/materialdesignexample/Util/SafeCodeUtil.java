@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import three.com.materialdesignexample.CallBack;
+
 /**
  * Created by Administrator on 2015/10/14.
  */
@@ -75,7 +77,7 @@ public class SafeCodeUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void getLoginCookie(final String username){
+    public static void getLoginCookie(final String username,CallBack callBack){
 
         final String url = "http://10.22.151.40/scripts/login.exe/getPassport?";
         final DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -108,10 +110,12 @@ public class SafeCodeUtil {
                     HttpUtil.cookie=cookie.toString();
                 }
                 else {
+                    callBack.onFinsh(null);
                     Log.d("TAG","获取Cookie失败");
                 }
             }
         } catch (Exception e) {
+            callBack.onFinsh(null);
             e.printStackTrace();
         }
 

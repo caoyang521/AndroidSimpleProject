@@ -20,6 +20,7 @@ import three.com.materialdesignexample.Db.Db;
 import three.com.materialdesignexample.Framgment.NewsFramgment;
 import three.com.materialdesignexample.Models.Course;
 import three.com.materialdesignexample.Models.News;
+import three.com.materialdesignexample.Models.Score;
 
 /**
  * Created by Administrator on 2015/10/20.
@@ -54,7 +55,7 @@ public class HandleResponseUtil {
 
         if (response!=null&&!"".equals(response)) {
             Document document = Jsoup.parse(response);
-            Elements pElements =  pElements = document.select("p");
+            Elements pElements  = document.select("p");
 
             StringBuilder sb = new StringBuilder();
             for (Element e : pElements) {
@@ -319,5 +320,55 @@ public class HandleResponseUtil {
             default:
                 break;
         }
+    }
+    public static ArrayList<Score> scores=new ArrayList<Score>();
+    public static String allScore;
+    public static void handleScoreHtmlStr(String htmlStr, final CallBack callBack) {
+
+        new AsyncTask<String, Integer, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(String... params) {
+                Boolean result=false;
+
+                try {
+                    int flag=0;
+                    Document document = Jsoup.parse(params[0]);
+                    Elements pElements = document.select("row");
+                    for(Element e:pElements){
+                        if(flag==0){
+                            allScore=e.select("JDF").text();
+                            flag=1;
+                        }
+                        else {
+                            Score score =new Score();
+                            score.setScoreName(e.select("coursename").text());
+                            score.setCredit(e.select("credits").text());
+                            score.setType(e.select("value").text());
+                            score.setExamScore(e.select("examscore").text());
+                            score.setPoint(e.select("point").text());
+                            score.setTestScore(e.select("testscore").text());
+                            scores.add(score);
+                        }
+                    }
+                    result=true;
+
+                } catch (Exception e) {
+                    result=false;
+                    Log.d("winson", "解析错误： " + e);
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                super.onPostExecute(result);
+                if(result)
+                    callBack.onFinsh("");
+                else
+                    Log.d("TAG","handle Score failed");
+            }
+        }.execute(htmlStr);
+
     }
 }

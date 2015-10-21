@@ -14,8 +14,10 @@ import android.view.MenuItem;
 import com.android.volley.Request;
 
 import three.com.materialdesignexample.CallBack;
+import three.com.materialdesignexample.Framgment.AboutFragment;
 import three.com.materialdesignexample.Framgment.CourseFramgment;
 import three.com.materialdesignexample.Framgment.NewsFramgment;
+import three.com.materialdesignexample.Framgment.ScoreFramgment;
 import three.com.materialdesignexample.Models.News;
 import three.com.materialdesignexample.R;
 import three.com.materialdesignexample.Util.HandleResponseUtil;
@@ -49,6 +51,8 @@ public class DrawerLayoutActivity extends AppCompatActivity {
         navigationView= (NavigationView) findViewById(R.id.navigation_view);
         setupDrawerContent(navigationView);
 
+        switchToCourse();  //主界面选为课表
+
     }
 
     @Override
@@ -70,7 +74,10 @@ public class DrawerLayoutActivity extends AppCompatActivity {
                             case R.id.school_course:
                                 switchToCourse();
                                 break;
-                            case R.id.navigation_item_about:
+                            case R.id.school_score:
+                                switchToScore();
+                                break;
+                            case R.id.about:
                                 switchToAbout();
                                 break;
 
@@ -80,6 +87,13 @@ public class DrawerLayoutActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
+
+    private void switchToScore() {
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ScoreFramgment()).commit();
+
+        toolbar.setTitle(R.string.school_score);
     }
 
     private void switchToNews() {
@@ -97,9 +111,9 @@ public class DrawerLayoutActivity extends AppCompatActivity {
                     HandleResponseUtil.parseTitleData(response);
                     closeProgressDialog();
                 }
-            }, Request.Method.GET,null);
-            toolbar.setTitle(R.string.school_news);
+            }, Request.Method.GET, null);
         }
+        toolbar.setTitle(R.string.school_news);
     }
 
     private void switchToCourse() {
@@ -112,8 +126,9 @@ public class DrawerLayoutActivity extends AppCompatActivity {
 
 
     private void switchToAbout() {
-//        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new AboutFragment()).commit();
-//        mToolbar.setTitle(R.string.navigation_about);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+        toolbar.setTitle(R.string.about);
     }
 
     public  void showProgressDialog() {

@@ -70,7 +70,28 @@ public class LoginActivity extends Activity{
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            SafeCodeUtil.getLoginCookie(user);
+                            SafeCodeUtil.getLoginCookie(user, new CallBack() {
+                                @Override
+                                public void onStart() {
+
+                                }
+
+                                @Override
+                                public void onFinsh(String response) {
+                                    // 通过runOnUiThread()方法回到主线程处理逻辑
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialog.Builder(LoginActivity.this)
+                                                    .setTitle("善意的提醒")
+                                                    .setPositiveButton("确定", null)
+                                                    .setMessage("请确保在校园网环境使用")
+                                                    .show();
+                                        }
+                                    });
+                                }
+                            });
+
                             final Bitmap codemap= SafeCodeUtil.getSafeCodePic();
 
                             // 通过runOnUiThread()方法回到主线程处理逻辑
@@ -91,6 +112,7 @@ public class LoginActivity extends Activity{
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("cookie_OK", false)) {
             HttpUtil.cookie=prefs.getString("cookie",null);
+            HttpUtil.userName=prefs.getString("username",null);
             Intent intent = new Intent(this, DrawerLayoutActivity.class);
             startActivity(intent);
             finish();
@@ -146,7 +168,8 @@ public class LoginActivity extends Activity{
 
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putBoolean("cookie_OK", true);
-        editor.putString("cookie",HttpUtil.cookie);
+        editor.putString("cookie", HttpUtil.cookie);
+        editor.putString("username",HttpUtil.userName);
         editor.commit();
     }
 }

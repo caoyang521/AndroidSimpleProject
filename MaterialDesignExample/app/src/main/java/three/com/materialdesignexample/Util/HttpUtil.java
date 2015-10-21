@@ -1,6 +1,7 @@
 package three.com.materialdesignexample.Util;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -21,9 +22,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -152,12 +157,12 @@ public class HttpUtil  {
             @Override
             public void run() {
                 callBack.onStart();
-                String url = "http://10.22.151.40/scripts/wzw_jspk.asp?WHO=" + "144173551" + "&year=2014&term=2&STUDENTNAME=" + "张坚";
-                try {
-                    url = "http://10.22.151.40/scripts/wzw_jspk.asp?WHO=144173551&year=2014&term=2&STUDENTNAME=" + URLEncoder.encode("张坚", "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                String url = "http://10.22.151.40/scripts/wzw_jspk.asp?WHO=" + userName + "&year=2015&term=1&STUDENTNAME=" + yourName;
+//                try {
+//                    url = "http://10.22.151.40/scripts/wzw_jspk.asp?WHO=144173551&year=2015&term=1&STUDENTNAME=" + URLEncoder.encode("张坚", "UTF-8");
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
                 Map<String, String> headers = new HashMap<String, String>();
                 //设置referer
                 headers.put("Referer", "http://10.22.151.40/scripts/login.exe/login?");
@@ -182,7 +187,42 @@ public class HttpUtil  {
 
     }
 
+    @SuppressWarnings("deprecation")
+    public static void getScoreHtml(final Context context, final CallBack callBack)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                callBack.onStart();
+                String url = "http://10.22.151.40/scripts/general.exe/query?YEAR=2015&TERM=1&STUDENTNO="+userName+"&page=1&pagename=l_cj_STUDENTALLSCORE.htm";
+//                try {
+//                    url = "http://10.22.151.40/scripts/wzw_jspk.asp?WHO=144173551&year=2015&term=1&STUDENTNAME=" + URLEncoder.encode("张坚", "UTF-8");
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+                Map<String, String> headers = new HashMap<String, String>();
+                //设置referer
+                headers.put("Referer", "http://10.22.151.40/scripts/login.exe/login?");
+                headers.put("User-Agent", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 10.0; WOW64; Trident/8.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)");
+                headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+                Log.d("TAG", cookie);
+                headers.put("Cookie", cookie);
+                isGBK = true;
+                getHtmlUtil(context, url, new CallBack() {
+                    @Override
+                    public void onStart() {
 
+                    }
+
+                    @Override
+                    public void onFinsh(String response) {
+                        HandleResponseUtil.handleScoreHtmlStr(response, callBack);
+                    }
+                }, Request.Method.GET, headers);
+            }
+        }).start();
+
+    }
 
     @SuppressWarnings("deprecation")
     public static void getLoginCookie(String Digest,CallBack callBack){
@@ -192,7 +232,7 @@ public class HttpUtil  {
         StringBuilder ckSb=new StringBuilder(cookie);
 
         try {
-            //String content =null;
+            String content =null;
             HttpPost post = new HttpPost(url);
             post.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36");
             post.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
@@ -205,7 +245,9 @@ public class HttpUtil  {
             post.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
             HttpResponse response = httpClient.execute(post);
             if(response.getStatusLine().getStatusCode() ==200){
-                // content = EntityUtils.toString(response.getEntity(), "GBK");
+                content = EntityUtils.toString(response.getEntity(), "GBK");
+
+                getYourName(content);//获取姓名
                 // Log.d("TAG",content);
                 // get cookieStore
                 CookieStore cookieStore = httpClient.getCookieStore();
@@ -229,6 +271,21 @@ public class HttpUtil  {
         } catch (Exception e) {
             callBack.onFinsh(null);
             e.printStackTrace();
+        }
+
+    }
+    private static String yourName;
+
+    private static void getYourName(String content) {
+
+        if (!TextUtils.isEmpty(content)) {
+            Document document = Jsoup.parse(content);
+            Elements pElements  = document.select("lable[id=NAME]");
+            String str=null;
+            for (Element e : pElements) {
+                str= e.text();
+            }
+            yourName=str;
         }
 
     }

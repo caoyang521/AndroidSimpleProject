@@ -61,7 +61,7 @@ public class CourseFramgment extends Fragment {
         }
         else
             initViewPage();
-        
+
         requestCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
