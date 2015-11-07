@@ -10,6 +10,7 @@ public class Score {
     private String type=null;
     private String examScore=null;
     private String credit=null;
+    private int Id;
 
     public String getExamScore() {
         return examScore;
@@ -58,5 +59,13 @@ public class Score {
 
     public void setCredit(String credit) {
         this.credit = credit;
+    }
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
     }
 }

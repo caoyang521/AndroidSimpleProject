@@ -47,11 +47,11 @@ public class PhoneServer extends Service{
                         break;
                     case TelephonyManager.CALL_STATE_RINGING:
                         Log.d("My Service", number);
-                        peopleInfo=db.loadPerson(number);
+                        peopleInfo=db.loadPersonByNumber(number);
                         if(peopleInfo!=null){
                            // textView.setText(peopleInfo.getName()+" "+peopleInfo.getNumber());
                            // Toast.makeText(getApplicationContext(),peopleInfo.getName(),Toast.LENGTH_LONG).show();
-                           createFloatView(peopleInfo.getName(),peopleInfo.getNumber());
+                           createFloatView(peopleInfo.getPeopleName(),peopleInfo.getPhoneNumber());
                         }
                         else{
                             Toast.makeText(getApplicationContext(),"查询失败",Toast.LENGTH_LONG).show();

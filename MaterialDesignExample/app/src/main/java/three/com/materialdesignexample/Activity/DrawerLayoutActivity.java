@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.android.volley.Request;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.Framgment.AboutFragment;
@@ -50,8 +52,10 @@ public class DrawerLayoutActivity extends AppCompatActivity {
 
         navigationView= (NavigationView) findViewById(R.id.navigation_view);
         setupDrawerContent(navigationView);
+        UmengUpdateAgent.update(this);
 
         switchToCourse();  //主界面选为课表
+
 
     }
 
@@ -144,5 +148,17 @@ public class DrawerLayoutActivity extends AppCompatActivity {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import three.com.materialdesignexample.Models.Course;
 import three.com.materialdesignexample.Models.News;
+import three.com.materialdesignexample.Models.Score;
 import three.com.materialdesignexample.Util.HandleResponseUtil;
 
 /**
@@ -60,6 +61,50 @@ public class Db {
         }
     }
 
+    public void saveScore(Score score){
+
+        if(score!=null){
+            ContentValues values =new ContentValues();
+            values.put("ScoreName", score.getScoreName());
+            values.put("point", score.getPoint());
+            values.put("testScore", score.getTestScore());
+            values.put("type", score.getType());
+            values.put("examScore", score.getExamScore());
+            values.put("credit", score.getCredit());
+
+            sqlDb.insert("Score", null, values);
+        }
+    }
+
+    public boolean loadScore(){
+
+        Cursor cursor= sqlDb.query("Score", null, null,null, null, null, null);
+        int flag=0;
+        HandleResponseUtil.scores.clear();
+        if(cursor.moveToFirst()){
+            do{
+                flag=1;
+                Score score=new Score();
+
+                score.setScoreName(cursor.getString(cursor.getColumnIndex("ScoreName")));
+                score.setPoint(cursor.getString(cursor.getColumnIndex("point")));
+                score.setTestScore(cursor.getString(cursor.getColumnIndex("testScore")));
+                score.setType(cursor.getString(cursor.getColumnIndex("type")));
+                score.setExamScore(cursor.getString(cursor.getColumnIndex("examScore")));
+                score.setCredit(cursor.getString(cursor.getColumnIndex("credit")));
+
+                HandleResponseUtil.scores.add(score);
+            }while(cursor.moveToNext());
+
+            if(cursor!=null){
+                cursor.close();
+            }
+            if(flag==1)
+                return true;
+        }
+        return false;
+    }
+
     public boolean loadCourse(){
 
         Cursor cursor= sqlDb.query("Course", null, null,null, null, null, null);
@@ -88,8 +133,6 @@ public class Db {
             if(flag==1)
                 return true;
         }
-
         return false;
-
     }
 }

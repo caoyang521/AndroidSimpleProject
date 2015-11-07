@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.umeng.analytics.MobclickAgent;
 
 import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.Db.Db;
@@ -142,5 +143,17 @@ public class NewsActivity extends AppCompatActivity {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

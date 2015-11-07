@@ -6,23 +6,43 @@ package three.com.phoneservice.Model;
 public class PeopleInfo {
 
     private int id=0;
-    private String Number="";
-    private String Name="";
 
-    public String getNumber() {
-        return Number;
+    private String schoolNumber;
+    private String peopleName;
+    private String phoneNumber;
+    private String className;
+
+    public String getClassName() {
+        return className;
     }
 
-    public void setNumber(String number) {
-        Number = number;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public String getName() {
-        return Name;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getSchoolNumber() {
+        return schoolNumber;
+    }
+
+    public void setSchoolNumber(String schoolNumber) {
+        this.schoolNumber = schoolNumber;
+    }
+
+    public String getPeopleName() {
+        return peopleName;
+    }
+
+    public void setPeopleName(String peopleName) {
+        this.peopleName = peopleName;
     }
 
     public int getId() {

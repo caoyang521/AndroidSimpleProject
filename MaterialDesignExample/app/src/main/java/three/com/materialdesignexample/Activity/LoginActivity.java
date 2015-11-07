@@ -1,6 +1,7 @@
 package three.com.materialdesignexample.Activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.umeng.analytics.MobclickAgent;
 
 import three.com.materialdesignexample.CallBack;
 import three.com.materialdesignexample.R;
@@ -29,7 +32,7 @@ public class LoginActivity extends Activity{
     private Button loginbtn=null;
     private Button safecodebtn=null;
     private ImageView codeimg=null;
-
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +73,28 @@ public class LoginActivity extends Activity{
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            runOnUiThread(
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            showProgressDialog();
+                                        }
+                                    }
+                            );
+
                             SafeCodeUtil.getLoginCookie(user, new CallBack() {
                                 @Override
                                 public void onStart() {
-
+                                    final Bitmap codemap = SafeCodeUtil.getSafeCodePic();
+                                    // 通过runOnUiThread()方法回到主线程处理逻辑
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            codeimg.setImageBitmap(codemap);
+                                            Log.d("TAG", "image over");
+                                        }
+                                    });
+                                    closeProgressDialog();
                                 }
 
                                 @Override
@@ -92,15 +113,7 @@ public class LoginActivity extends Activity{
                                 }
                             });
 
-                            final Bitmap codemap= SafeCodeUtil.getSafeCodePic();
 
-                            // 通过runOnUiThread()方法回到主线程处理逻辑
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    codeimg.setImageBitmap(codemap);
-                                }
-                            });
                         }
                     }).start();
                 }
@@ -171,5 +184,31 @@ public class LoginActivity extends Activity{
         editor.putString("cookie", HttpUtil.cookie);
         editor.putString("username",HttpUtil.userName);
         editor.commit();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+    public  void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("正在加载...");
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
+        progressDialog.show();
+    }
+
+    private  void closeProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 }

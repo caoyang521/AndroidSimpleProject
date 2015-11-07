@@ -1,7 +1,9 @@
 package three.com.materialdesignexample.Framgment;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 
 import three.com.materialdesignexample.Adapter.ScoreAdapter;
 import three.com.materialdesignexample.CallBack;
+import three.com.materialdesignexample.Db.Db;
 import three.com.materialdesignexample.Models.Score;
 import three.com.materialdesignexample.R;
 import three.com.materialdesignexample.Util.HandleResponseUtil;
@@ -45,6 +48,8 @@ public class ScoreFramgment extends Fragment {
         h_v=view.findViewById(R.id.h_v);
         allScore_tv= (TextView) view.findViewById(R.id.allScore_tv);
 
+        findFromDb();
+
         importBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +71,7 @@ public class ScoreFramgment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                allScore_tv.setText(HandleResponseUtil.allScore);
+                                saveAllScore();
                                 initView();
                                 closeProgressDialog();
                             }
@@ -80,7 +85,23 @@ public class ScoreFramgment extends Fragment {
         return view;
     }
 
+    private void findFromDb() {
+        if(scoreData.size()==0){
+            if(HandleResponseUtil.db==null){
+                HandleResponseUtil.db= Db.getInstance(getActivity());
+            }
+            if(HandleResponseUtil.db!=null){
+                if(HandleResponseUtil.db.loadScore()){
+                    initView();
+                }
+            }
+        }
+        else
+            initView();
+    }
+
     private void initView(){
+        setAllScore();
         scoreLv.setAdapter(new ScoreAdapter(getActivity(),scoreData));
         scoreLv.setVisibility(View.VISIBLE);
         emptyLayout.setVisibility(View.GONE);
@@ -91,7 +112,7 @@ public class ScoreFramgment extends Fragment {
     public  void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("正在加载...");
+            progressDialog.setMessage("正在导入，这可能需要一点时间...");
             progressDialog.setCanceledOnTouchOutside(false);
         }
         progressDialog.show();
@@ -101,5 +122,18 @@ public class ScoreFramgment extends Fragment {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    private void setAllScore() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        allScore_tv.setText(prefs.getString("allScore",null));
+    }
+
+    private void saveAllScore(){
+
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+        editor.putString("allScore",HandleResponseUtil.allScore);
+        editor.commit();
     }
 }

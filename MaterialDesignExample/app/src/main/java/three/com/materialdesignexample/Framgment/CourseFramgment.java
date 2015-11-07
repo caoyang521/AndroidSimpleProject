@@ -14,9 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import java.util.Calendar;
 import java.util.List;
 
 import three.com.materialdesignexample.Adapter.CourseAdapter;
@@ -49,18 +51,7 @@ public class CourseFramgment extends Fragment {
         requestCourse= (Button) view.findViewById(R.id.import_btn);
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
 
-        if(data.size()==0){
-            if(HandleResponseUtil.db==null){
-                HandleResponseUtil.db= Db.getInstance(getActivity());
-            }
-            if(HandleResponseUtil.db!=null){
-                if(HandleResponseUtil.db.loadCourse()){
-                    initViewPage();
-                }
-            }
-        }
-        else
-            initViewPage();
+        findFromDb();
 
         requestCourse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +74,7 @@ public class CourseFramgment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 initViewPage();
                                 closeProgressDialog();
                             }
@@ -95,6 +87,22 @@ public class CourseFramgment extends Fragment {
 
         return view;
     }
+
+    private void findFromDb() {
+        if(data.size()==0){
+            if(HandleResponseUtil.db==null){
+                HandleResponseUtil.db= Db.getInstance(getActivity());
+            }
+            if(HandleResponseUtil.db!=null){
+                if(HandleResponseUtil.db.loadCourse()){
+                    initViewPage();
+                }
+            }
+        }
+        else
+            initViewPage();
+    }
+
     private void initViewPage(){
         //ViewPager init
         vpAdapter= new ViewPagerAdapter(getActivity(),data);
@@ -107,7 +115,39 @@ public class CourseFramgment extends Fragment {
         pager.setVisibility(View.VISIBLE);
         emptyLayout.setVisibility(View.GONE);
 
+        //根据星期几选定课程表
+        whatDayIs();
 
+    }
+
+    //根据星期几选定课程表
+    private void whatDayIs() {
+        Calendar calendar = Calendar.getInstance();
+        int date = 0;
+        switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.MONDAY:
+                date = 0;
+                break;
+            case Calendar.TUESDAY:
+                date = 1;
+                break;
+            case Calendar.WEDNESDAY:
+                date = 2;
+                break;
+            case Calendar.THURSDAY:
+                date = 3;
+                break;
+            case Calendar.FRIDAY:
+                date = 4;
+                break;
+            case Calendar.SATURDAY:
+                date = 5;
+                break;
+            case Calendar.SUNDAY:
+                date = 6;
+                break;
+        }
+        pager.setCurrentItem(date);
     }
 
     public static CourseAdapter courseAdapter;
@@ -126,7 +166,7 @@ public class CourseFramgment extends Fragment {
     public  void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("正在加载...");
+            progressDialog.setMessage("正在导入，这可能需要一点时间...");
             progressDialog.setCanceledOnTouchOutside(false);
         }
         progressDialog.show();
@@ -137,6 +177,7 @@ public class CourseFramgment extends Fragment {
             progressDialog.dismiss();
         }
     }
+
 
     private class ViewPagerAdapter extends PagerAdapter {
 
@@ -181,10 +222,16 @@ public class CourseFramgment extends Fragment {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-
-            ListView listView = getDateListView(context, data.get(position));
-            container.addView(listView);
-            return listView;
+            if( data.get(position).size() < 1) {
+                TextView textView = (TextView) View.inflate(context, R.layout.course_empty_textview, null);
+                container.addView(textView);
+                return textView;
+            }
+            else{
+                ListView listView = getDateListView(context, data.get(position));
+                container.addView(listView);
+                return listView;
+            }
 
         }
 

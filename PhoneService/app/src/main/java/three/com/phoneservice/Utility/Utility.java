@@ -6,6 +6,9 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.MainActivity;
 import three.com.phoneservice.Model.PeopleInfo;
@@ -28,33 +31,17 @@ public class Utility {
 //        }
 //    }
 
-    public synchronized static boolean handlePersonResponse(Db db){
+    public synchronized static boolean handlePersonResponse(Db db, ArrayList<PeopleInfo> phoneInfos,CallBack callBack){
 
         boolean isover=false;
         if (TextUtils.isEmpty(HttpUtility.response))
             return isover;
         try{
-
-            {
-                PeopleInfo peopleInfo =new PeopleInfo();
-                peopleInfo.setName("张特");
-                peopleInfo.setNumber("13958839460");
-                db.savePerson(peopleInfo);
-
-            }
+            db.clear("Person");
             JSONObject jsonObject = new JSONObject(String.valueOf(HttpUtility.response));
             JSONArray jsonArray = jsonObject.getJSONArray("rows");
             Log.i("test","begin");
-            db.savePerson(jsonArray);
-//
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//
-//                JSONObject peopleObj =jsonArray.getJSONObject(i);
-//                PeopleInfo peopleInfo =new PeopleInfo();
-//                peopleInfo.setName(peopleObj.getString("学生姓名"));
-//                peopleInfo.setNumber(peopleObj.getString("手机短号"));
-//                db.savePerson(peopleInfo);
-//            }
+            db.savePerson(jsonArray,phoneInfos,callBack);
             Log.i("test","emd");
             MainActivity.isSendHttpRequest=true;
             isover=true;

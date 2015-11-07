@@ -329,6 +329,7 @@ public class HandleResponseUtil {
 
             @Override
             protected Boolean doInBackground(String... params) {
+                scores.clear();
                 Boolean result=false;
 
                 try {
@@ -348,6 +349,7 @@ public class HandleResponseUtil {
                             score.setExamScore(e.select("examscore").text());
                             score.setPoint(e.select("point").text());
                             score.setTestScore(e.select("testscore").text());
+                            db.saveScore(score);
                             scores.add(score);
                         }
                     }
@@ -371,4 +373,5 @@ public class HandleResponseUtil {
         }.execute(htmlStr);
 
     }
+
 }
