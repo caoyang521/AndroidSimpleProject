@@ -9,21 +9,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import three.com.phoneservice.Db.Db;
+import three.com.phoneservice.params.AppParams;
 
 /**
  * Created by Administrator on 2015/9/28.
  */
 public class HttpUtility {
 
-    static final String address = "http://Xg.ndky.edu.cn/android/GetAllstudenttelephone.aspx";
+
     static StringBuilder response = new StringBuilder("");
 
-    public static void sendHttpRequest(final Db db) {
+    public static boolean sendHttpRequest() {
 
         if (TextUtils.isEmpty(response)) {
             HttpURLConnection connection = null;
             try {
-                URL url = new URL(address);
+                URL url = new URL(AppParams.address);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setConnectTimeout(8000);
@@ -34,9 +35,13 @@ public class HttpUtility {
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
+                return true;
             } catch (Exception e) {
                 e.printStackTrace();
+
             }
+
         }
+        return false;
     }
 }

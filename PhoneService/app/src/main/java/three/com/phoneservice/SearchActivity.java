@@ -1,16 +1,22 @@
 package three.com.phoneservice;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -53,6 +59,48 @@ public class SearchActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
+
+        search_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String number = ((PeopleInfo) parent.getItemAtPosition(position)).getPhoneNumber();
+                Log.d("tag", number);
+                String flag = number.substring(0, 2);
+                if (!TextUtils.isEmpty(flag) && !flag.equals("  ")) {
+                    showDeleteDialog(SearchActivity.this, number);
+                } else {
+                    new AlertDialog.Builder(SearchActivity.this)
+                            .setTitle("善意的提醒")
+                            .setPositiveButton("确定", null)
+                            .setMessage("未查询到电话号码")
+                            .show();
+                }
+            }
+        });
+    }
+
+    private void showDeleteDialog(Context context, final String number) {
+        android.app.AlertDialog alertDialog = null;
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setMessage("是否要拨打电话?")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Uri uri = Uri.parse("tel:"+number);
+                        Intent it = new Intent(Intent.ACTION_DIAL, uri);
+                        startActivity(it);
+
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override

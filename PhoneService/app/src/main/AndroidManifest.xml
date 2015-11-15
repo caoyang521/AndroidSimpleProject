@@ -10,10 +10,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
-        </activity>
         <activity android:name=".PhoneActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,10 +19,11 @@
         <activity android:name=".SearchActivity"></activity>
         <service
             android:name="three.com.phoneservice.PhoneServer">
-            <intent-filter android:priority="1000">
+            <intent-filter >
                 <action android:name="three.com.phoneservice.PhoneServer" />
             </intent-filter>
         </service>
+
     </application>
 
 </manifest>

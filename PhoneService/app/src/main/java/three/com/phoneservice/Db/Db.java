@@ -88,7 +88,7 @@ public class Db {
     }
 
     public PeopleInfo loadPersonByNumber(String number){
-        Cursor cursor= Sqldb.query("Person", null, "Number=?", new String[]{number}, null, null, null);
+        Cursor cursor= Sqldb.query("Person", null, "phoneNumber=?", new String[]{number}, null, null, null);
         PeopleInfo peopleInfo =new PeopleInfo();
         if(cursor.moveToFirst()){
             do{

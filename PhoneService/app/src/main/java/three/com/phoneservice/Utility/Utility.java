@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Db.Db;
-import three.com.phoneservice.MainActivity;
 import three.com.phoneservice.Model.PeopleInfo;
 
 /**
@@ -18,18 +17,6 @@ import three.com.phoneservice.Model.PeopleInfo;
  */
 public class Utility {
 
-//    public static void createPersonInfo(Db db){
-//        for(int i=1;i<=10;i++){
-//            PeopleInfo peopleInfo=new PeopleInfo();
-//            peopleInfo.setNumber(Integer.toString(i));
-//            peopleInfo.setName("a" + i);
-//            if(i==5){
-//                peopleInfo.setNumber("663085");
-//                peopleInfo.setName("Zmn");
-//            }
-//            db.savePerson(peopleInfo);
-//        }
-//    }
 
     public synchronized static boolean handlePersonResponse(Db db, ArrayList<PeopleInfo> phoneInfos,CallBack callBack){
 
@@ -43,7 +30,6 @@ public class Utility {
             Log.i("test","begin");
             db.savePerson(jsonArray,phoneInfos,callBack);
             Log.i("test","emd");
-            MainActivity.isSendHttpRequest=true;
             isover=true;
         }catch(Exception e){
             e.printStackTrace();

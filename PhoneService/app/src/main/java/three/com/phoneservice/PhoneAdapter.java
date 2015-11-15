@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import three.com.phoneservice.Model.PeopleInfo;
+import three.com.phoneservice.Utility.ViewHolder;
 
 /**
  * Created by Administrator on 2015/11/6.
@@ -84,7 +85,6 @@ public class PhoneAdapter extends BaseAdapter{
         PeopleInfo phoneInfo= phoneInfos.get(position);
 
         holder.head_name_tv.setBackgroundResource(circleShape);
-
         holder.head_name_tv.setText(phoneInfo.getPeopleName().substring(0,1));
         holder.class_name_tv.setText(phoneInfo.getClassName());
         holder.phone_number_tv.setText(phoneInfo.getPhoneNumber());
@@ -94,11 +94,4 @@ public class PhoneAdapter extends BaseAdapter{
         return convertView;
     }
 
-    private static class ViewHolder {
-        TextView head_name_tv;
-        TextView class_name_tv;
-        TextView phone_number_tv;
-        TextView name_tv;
-        TextView school_number_tv;
-    }
 }
