@@ -1,10 +1,9 @@
-package three.com.phoneservice;
+package three.com.phoneservice.Service;
 
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
@@ -17,10 +16,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.zip.Inflater;
-
 import three.com.phoneservice.Db.DbHolder;
 import three.com.phoneservice.Model.PeopleInfo;
+import three.com.phoneservice.R;
 import three.com.phoneservice.Utility.ViewHolder;
 
 /**
@@ -159,7 +157,7 @@ public class PhoneServer extends Service{
         }
 //        else {
 //            remeView();
-//            wm.addView(floatView, params);
+//            wm.addView(floatView, Params);
 //            isAdded=true;
 //        }
 

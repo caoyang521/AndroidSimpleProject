@@ -8,8 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import three.com.phoneservice.Db.Db;
-import three.com.phoneservice.params.AppParams;
+import three.com.phoneservice.Params.AppParams;
 
 /**
  * Created by Administrator on 2015/9/28.
@@ -24,7 +23,7 @@ public class HttpUtility {
         if (TextUtils.isEmpty(response)) {
             HttpURLConnection connection = null;
             try {
-                URL url = new URL(AppParams.address);
+                URL url = new URL(AppParams.phoneAddress);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setConnectTimeout(8000);

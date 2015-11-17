@@ -1,4 +1,4 @@
-package three.com.phoneservice;
+package three.com.phoneservice.Adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import three.com.phoneservice.Model.PeopleInfo;
+import three.com.phoneservice.R;
 import three.com.phoneservice.Utility.ViewHolder;
 
 /**

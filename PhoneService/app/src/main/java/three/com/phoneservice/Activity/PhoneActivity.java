@@ -1,4 +1,4 @@
-package three.com.phoneservice;
+package three.com.phoneservice.Activity;
 
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -28,14 +27,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.logging.LogRecord;
 
+import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.Db.DbHolder;
 import three.com.phoneservice.Model.PeopleInfo;
+import three.com.phoneservice.Adapter.PhoneAdapter;
+import three.com.phoneservice.Service.PhoneServer;
+import three.com.phoneservice.R;
 import three.com.phoneservice.Utility.HttpUtility;
 import three.com.phoneservice.Utility.Utility;
-import three.com.phoneservice.params.AppParams;
+import three.com.phoneservice.Params.AppParams;
 
 /**
  * Created by Administrator on 2015/11/6.
@@ -286,6 +288,10 @@ public class PhoneActivity extends AppCompatActivity{
             SearchActivity.startSearchStatusActivity(this, DbHolder.db);
             return true;
         }
+        else if(id==R.id.action_login){
+            Intent loginIntent =new Intent(PhoneActivity.this,LoginActivity.class);
+            startActivity(loginIntent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -313,7 +319,7 @@ public class PhoneActivity extends AppCompatActivity{
         ArrayList<ActivityManager.RunningServiceInfo> runningService = (ArrayList<ActivityManager.RunningServiceInfo>) myManager.getRunningServices(30);
         for(int i = 0 ; i<runningService.size();i++)
         {
-            if(runningService.get(i).service.getClassName().toString().equals("three.com.phoneservice.PhoneServer"))
+            if(runningService.get(i).service.getClassName().toString().equals("three.com.phoneservice.Service.PhoneServer"))
             {
                 return true;
             }

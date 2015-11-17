@@ -1,4 +1,4 @@
-package three.com.phoneservice;
+package three.com.phoneservice.Activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.Db.DbHolder;
 import three.com.phoneservice.Model.PeopleInfo;
+import three.com.phoneservice.Adapter.PhoneAdapter;
+import three.com.phoneservice.R;
 
 /**
  * Created by Administrator on 2015/11/7.
