@@ -88,10 +88,7 @@ public class SearchActivity extends AppCompatActivity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                        Uri uri = Uri.parse("tel:"+number);
-                        Intent it = new Intent(Intent.ACTION_DIAL, uri);
-                        startActivity(it);
+                        phoneCall(number);
 
                     }
                 })
@@ -103,6 +100,15 @@ public class SearchActivity extends AppCompatActivity {
                 });
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void phoneCall(String number) {
+        if(DbHolder.db==null)
+            DbHolder.db=Db.getInstance(this);
+        DbHolder.db.loadPersonByNumber(number);
+        Uri uri = Uri.parse("tel:"+number);
+        Intent it = new Intent(Intent.ACTION_DIAL, uri);
+        startActivity(it);
     }
 
     @Override

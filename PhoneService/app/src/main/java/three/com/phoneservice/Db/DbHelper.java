@@ -14,6 +14,7 @@ public class DbHelper extends SQLiteOpenHelper {
             + "schoolNumber text,"
             + "peopleName text,"
             + "phoneNumber text,"
+            + "hasBeenCalled integer,"
             + "className text)";
 
     public DbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

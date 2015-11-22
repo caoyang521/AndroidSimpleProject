@@ -68,6 +68,7 @@ public class Db {
                     values.put("peopleName", peopleInfo.getPeopleName());
                     values.put("schoolNumber",peopleInfo.getSchoolNumber());
                     values.put("className",peopleInfo.getClassName());
+                    values.put("hasBeenCalled",peopleInfo.getHasBeenCalled());
                     Sqldb.insert("Person", null, values);
                 }
 
@@ -92,11 +93,16 @@ public class Db {
         PeopleInfo peopleInfo =new PeopleInfo();
         if(cursor.moveToFirst()){
             do{
+                ContentValues values = new ContentValues();
+                values.put("hasBeenCalled", 1);
+                Sqldb.update("Person", values, "phoneNumber=?", new String[]{number});
+
                 peopleInfo.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 peopleInfo.setPeopleName(cursor.getString(cursor.getColumnIndex("peopleName")));
                 peopleInfo.setPhoneNumber(cursor.getString(cursor.getColumnIndex("phoneNumber")));
                 peopleInfo.setClassName(cursor.getString(cursor.getColumnIndex("className")));
                 peopleInfo.setSchoolNumber(cursor.getString(cursor.getColumnIndex("schoolNumber")));
+                peopleInfo.setHasBeenCalled(1);
             }while(cursor.moveToNext());
         }
         else
@@ -108,8 +114,38 @@ public class Db {
         return peopleInfo;
     }
 
+//    public boolean loadPhoneInfo(ArrayList<PeopleInfo> phoneInfos,CallBack callBack) {
+//        Cursor cursor= Sqldb.query("Person", null, null,null, null, null, null);
+//        int flag=0;
+//        phoneInfos.clear();
+//        if(cursor.moveToFirst()){
+//            callBack.onStart();
+//            do{
+//                flag=1;
+//
+//                PeopleInfo phoneInfo=new PeopleInfo();
+//                phoneInfo.setSchoolNumber(cursor.getString(cursor.getColumnIndex("schoolNumber")));
+//                phoneInfo.setClassName(cursor.getString(cursor.getColumnIndex("className")));
+//                phoneInfo.setPeopleName(cursor.getString(cursor.getColumnIndex("peopleName")));
+//                phoneInfo.setPhoneNumber(cursor.getString(cursor.getColumnIndex("phoneNumber")));
+//
+//                phoneInfos.add(phoneInfo);
+//            }while(cursor.moveToNext());
+//
+//            if(cursor!=null){
+//                cursor.close();
+//            }
+//            if(flag==1){
+//                callBack.onFinsh(null);
+//                return true;
+//            }
+//
+//        }
+//        return false;
+//    }
+
     public boolean loadPhoneInfo(ArrayList<PeopleInfo> phoneInfos,CallBack callBack) {
-        Cursor cursor= Sqldb.query("Person", null, null,null, null, null, null);
+        Cursor cursor= Sqldb.query("Person", null, "hasBeenCalled=?",new String[]{"1"}, null, null, null);
         int flag=0;
         phoneInfos.clear();
         if(cursor.moveToFirst()){
@@ -122,7 +158,7 @@ public class Db {
                 phoneInfo.setClassName(cursor.getString(cursor.getColumnIndex("className")));
                 phoneInfo.setPeopleName(cursor.getString(cursor.getColumnIndex("peopleName")));
                 phoneInfo.setPhoneNumber(cursor.getString(cursor.getColumnIndex("phoneNumber")));
-
+                phoneInfo.setHasBeenCalled(cursor.getInt(cursor.getColumnIndex("hasBeenCalled")));
                 phoneInfos.add(phoneInfo);
             }while(cursor.moveToNext());
 
@@ -135,6 +171,7 @@ public class Db {
             }
 
         }
+        callBack.onFinsh("fuck");
         return false;
     }
 

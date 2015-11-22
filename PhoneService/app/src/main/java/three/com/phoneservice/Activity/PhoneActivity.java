@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import three.com.phoneservice.Adapter.PhoneAdapter;
 import three.com.phoneservice.Service.PhoneServer;
 import three.com.phoneservice.R;
 import three.com.phoneservice.Utility.HttpUtility;
+import three.com.phoneservice.Utility.SharedPreferencesHelper;
 import three.com.phoneservice.Utility.Utility;
 import three.com.phoneservice.Params.AppParams;
 
@@ -51,7 +53,7 @@ public class PhoneActivity extends AppCompatActivity{
     private PhoneAdapter phoneAdapter;
     private LinearLayout emptyLayout;
     private ProgressDialog progressDialog;
-
+    private TextView noPhoneHistory_tv;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -67,6 +69,7 @@ public class PhoneActivity extends AppCompatActivity{
 
         swipeRefreshLayout= (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         import_btn= (Button) findViewById(R.id.import_btn);
+        noPhoneHistory_tv= (TextView) findViewById(R.id.no_phone_history);
         phone_lv= (ListView) findViewById(R.id.phone_lv);
         phoneAdapter=new PhoneAdapter(this,phoneInfos);
         DbHolder.db=Db.getInstance(this);
@@ -86,7 +89,8 @@ public class PhoneActivity extends AppCompatActivity{
         swipeRefreshLayout.setColorSchemeColors(R.color.mainColor);
         emptyLayout= (LinearLayout) findViewById(R.id.empty_layout);
 
-        findFromDb();
+
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -167,9 +171,7 @@ public class PhoneActivity extends AppCompatActivity{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Uri uri = Uri.parse("tel:"+number);
-                        Intent it = new Intent(Intent.ACTION_DIAL, uri);
-                        startActivity(it);
+                        phoneCall(number);
 
                     }
                 })
@@ -181,6 +183,13 @@ public class PhoneActivity extends AppCompatActivity{
                 });
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void phoneCall(String number) {
+        DbHolder.db.loadPersonByNumber(number);
+        Uri uri = Uri.parse("tel:"+number);
+        Intent it = new Intent(Intent.ACTION_DIAL, uri);
+        startActivity(it);
     }
 
     private void findFromHttp() {
@@ -199,6 +208,7 @@ public class PhoneActivity extends AppCompatActivity{
                         public void run() {
                             initView();
                             handler.sendEmptyMessage(AppParams.HttpSuccess);
+                            SharedPreferencesHelper.PhoneHasImported(PhoneActivity.this);
                         }
                     });
                 }
@@ -213,7 +223,7 @@ public class PhoneActivity extends AppCompatActivity{
 
     private void initView(){
         Log.d("TAG", "initview");
-
+        noPhoneHistory_tv.setVisibility(View.GONE);
         phoneAdapter.notifyDataSetChanged();
         phone_lv.setAdapter(phoneAdapter);
         phone_lv.setVisibility(View.VISIBLE);
@@ -228,28 +238,17 @@ public class PhoneActivity extends AppCompatActivity{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(phoneInfos.size()==0){
-                    if(DbHolder.db!=null){
-                        DbHolder.db.loadPhoneInfo(phoneInfos, new CallBack() {
-                            @Override
-                            public void onStart() {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                swipeRefreshLayout.setRefreshing(true);
-                                            }
-                                        });
-                                        swipeRefreshLayout.setVisibility(View.VISIBLE);
-                                        emptyLayout.setVisibility(View.GONE);
-                                    }
-                                });
-                            }
 
-                            @Override
-                            public void onFinsh(String response) {
+                if(DbHolder.db!=null){
+                    DbHolder.db.loadPhoneInfo(phoneInfos, new CallBack() {
+                        @Override
+                        public void onStart() {
+
+                        }
+
+                        @Override
+                        public void onFinsh(String response) {
+                            if(response==null){
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -257,20 +256,32 @@ public class PhoneActivity extends AppCompatActivity{
                                     }
                                 });
                             }
-                        });
-                    }
-                }
-                else{
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            initView();
+                            else{
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        noPhoneHistory_tv.setVisibility(View.VISIBLE);
+                                        phoneAdapter.notifyDataSetChanged();
+                                    }
+                                });
+
+                            }
                         }
                     });
                 }
             }
-        }).start();
 
+        }).start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("three","onResume");
+        if(SharedPreferencesHelper.IsPhoneImported(this)){
+            emptyLayout.setVisibility(View.GONE);
+            findFromDb();
+        }
     }
 
     @Override

@@ -11,6 +11,7 @@ public class PeopleInfo {
     private String peopleName;
     private String phoneNumber;
     private String className;
+    private int hasBeenCalled=0;
 
     public String getClassName() {
         return className;
@@ -51,5 +52,13 @@ public class PeopleInfo {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getHasBeenCalled() {
+        return hasBeenCalled;
+    }
+
+    public void setHasBeenCalled(int hasBeenCalled) {
+        this.hasBeenCalled = hasBeenCalled;
     }
 }
