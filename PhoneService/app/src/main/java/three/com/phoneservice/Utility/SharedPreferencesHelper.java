@@ -28,7 +28,8 @@ public class SharedPreferencesHelper {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putString("name", AppParams.name);
         editor.putString("school", AppParams.School);
-        editor.putString("class", AppParams.classRoom);
+        editor.putString("class", AppParams.className);
+        editor.putString("schoolNumber", AppParams.SchoolNumber);
         editor.commit();
     }
 
@@ -36,7 +37,8 @@ public class SharedPreferencesHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         AppParams.name=prefs.getString("name", null);
         AppParams.School=prefs.getString("school", null);
-        AppParams.classRoom=prefs.getString("class", null);
+        AppParams.className =prefs.getString("class", null);
+        AppParams.SchoolNumber=prefs.getString("schoolNumber",null);
         if(AppParams.name==null)
             return false;
         else

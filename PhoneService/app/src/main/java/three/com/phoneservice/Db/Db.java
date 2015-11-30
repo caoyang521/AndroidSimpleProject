@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Model.PeopleInfo;
+import three.com.phoneservice.Params.AppParams;
 
 
 /**
@@ -176,7 +177,7 @@ public class Db {
     }
 
     public boolean  loadPhoneInfoByName(String name, ArrayList<PeopleInfo> phoneInfos) {
-        Cursor cursor= Sqldb.query("Person", null, "peopleName like ?",new String[]{"%"+String.valueOf(name)+"%"}, null, null, null);
+        Cursor cursor= Sqldb.query("Person", null, "peopleName like ? and className = ?",new String[]{"%"+String.valueOf(name)+"%", AppParams.className}, null, null, null);
         int flag=0;
         phoneInfos.clear();
         if(cursor.moveToFirst()){

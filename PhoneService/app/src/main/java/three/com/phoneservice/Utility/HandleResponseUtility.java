@@ -44,10 +44,10 @@ public class HandleResponseUtility {
 
         AppParams.name=info[1];
         AppParams.School=info[3];
-        AppParams.classRoom=info[5];
+        AppParams.className =info[5];
         Log.d("name",AppParams.name);
         Log.d("School",AppParams.School);
-        Log.d("classRoom",AppParams.classRoom);
+        Log.d("className",AppParams.className);
     }
 
 }

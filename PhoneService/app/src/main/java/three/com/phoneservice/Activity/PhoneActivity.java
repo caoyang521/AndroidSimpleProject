@@ -27,19 +27,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
+import com.umeng.update.UmengUpdateAgent;
+
 import java.util.ArrayList;
 
+import three.com.phoneservice.Adapter.PhoneAdapter;
 import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.Db.DbHolder;
 import three.com.phoneservice.Model.PeopleInfo;
-import three.com.phoneservice.Adapter.PhoneAdapter;
-import three.com.phoneservice.Service.PhoneServer;
+import three.com.phoneservice.Params.AppParams;
 import three.com.phoneservice.R;
+import three.com.phoneservice.Service.PhoneServer;
+import three.com.phoneservice.Utility.HandleResponseUtility;
 import three.com.phoneservice.Utility.HttpUtility;
 import three.com.phoneservice.Utility.SharedPreferencesHelper;
-import three.com.phoneservice.Utility.HandleResponseUtility;
-import three.com.phoneservice.Params.AppParams;
 
 /**
  * Created by Administrator on 2015/11/6.
@@ -61,6 +65,22 @@ public class PhoneActivity extends AppCompatActivity{
         Log.d("three", "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.phone_activity);
+        UmengUpdateAgent.update(this);
+        final PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.enable();
+
+        Runnable addAliasRunnable = new Runnable() {
+            public void run() {
+                try {
+
+                    mPushAgent.addAlias(AppParams.SchoolNumber, "KYZS");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(addAliasRunnable).start();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -163,6 +183,10 @@ public class PhoneActivity extends AppCompatActivity{
         Log.d("three", "oncreate over");
     }
 
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
     public void showDeleteDialog(Context context, final String number) {
         android.app.AlertDialog alertDialog = null;
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
@@ -216,7 +240,7 @@ public class PhoneActivity extends AppCompatActivity{
         }
         else
         {
-           handler.sendEmptyMessage(AppParams.HttpTimeOut);
+            handler.sendEmptyMessage(AppParams.HttpTimeOut);
 
         }
     }
@@ -277,7 +301,8 @@ public class PhoneActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("three","onResume");
+        Log.d("three", "onResume");
+        MobclickAgent.onResume(this);
         if(SharedPreferencesHelper.IsPhoneImported(this)){
             emptyLayout.setVisibility(View.GONE);
             findFromDb();

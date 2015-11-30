@@ -20,12 +20,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
+
 import java.util.ArrayList;
 
+import three.com.phoneservice.Adapter.PhoneAdapter;
 import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.Db.DbHolder;
 import three.com.phoneservice.Model.PeopleInfo;
-import three.com.phoneservice.Adapter.PhoneAdapter;
 import three.com.phoneservice.R;
 
 /**
@@ -47,6 +50,7 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PushAgent.getInstance(this).onAppStart();
         setContentView(R.layout.activity_search_status);
 
         search_list= (ListView) findViewById(R.id.search_listView);
@@ -161,4 +165,14 @@ public class SearchActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

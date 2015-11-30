@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
+
 import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Params.AppParams;
 import three.com.phoneservice.R;
@@ -31,10 +34,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PushAgent.getInstance(this).onAppStart();
         if(SharedPreferencesHelper.getStdInfo(this)){
             Log.d("name", AppParams.name);
             Log.d("School",AppParams.School);
-            Log.d("classRoom",AppParams.classRoom);
+            Log.d("className",AppParams.className);
             finish();
             Intent intent=new Intent(LoginActivity.this,PhoneActivity.class);
             startActivity(intent);
@@ -75,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                                 public void run() {
                                     if ("ok".equals(response)) {
                                         ProgressDialogHelper.closeProgressDialog();
+                                        AppParams.SchoolNumber=stNumber;
                                         SharedPreferencesHelper.saveStdInfo(LoginActivity.this);
                                         finish();
                                         Intent intent = new Intent(LoginActivity.this, PhoneActivity.class);
@@ -97,4 +102,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }
