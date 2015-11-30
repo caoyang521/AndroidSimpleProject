@@ -38,7 +38,7 @@ import three.com.phoneservice.Service.PhoneServer;
 import three.com.phoneservice.R;
 import three.com.phoneservice.Utility.HttpUtility;
 import three.com.phoneservice.Utility.SharedPreferencesHelper;
-import three.com.phoneservice.Utility.Utility;
+import three.com.phoneservice.Utility.HandleResponseUtility;
 import three.com.phoneservice.Params.AppParams;
 
 /**
@@ -195,7 +195,7 @@ public class PhoneActivity extends AppCompatActivity{
     private void findFromHttp() {
 
         if (HttpUtility.sendHttpRequest()) {
-            Utility.handlePersonResponse(DbHolder.db, phoneInfos, new CallBack() {
+            HandleResponseUtility.handlePersonResponse(DbHolder.db, phoneInfos, new CallBack() {
                 @Override
                 public void onStart() {
 
@@ -300,7 +300,7 @@ public class PhoneActivity extends AppCompatActivity{
             return true;
         }
         else if(id==R.id.action_login){
-            Intent loginIntent =new Intent(PhoneActivity.this,LoginActivity.class);
+            Intent loginIntent =new Intent(PhoneActivity.this,WebLoginActivity.class);
             startActivity(loginIntent);
         }
         return super.onOptionsItemSelected(item);

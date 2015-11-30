@@ -1,69 +1,100 @@
 package three.com.phoneservice.Activity;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Toast;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
+import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Params.AppParams;
 import three.com.phoneservice.R;
+import three.com.phoneservice.Utility.HttpUtility;
+import three.com.phoneservice.Utility.ProgressDialogHelper;
+import three.com.phoneservice.Utility.SharedPreferencesHelper;
 
 /**
- * Created by Administrator on 2015/11/17.
+ * Created by Administrator on 2015/11/26.
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private WebView webView;
 
+    private EditText loginid_et;
+    private EditText loginpswd_et;
+    private Button login_ok_btn;
+    private String stNumber;
+    private String stPassWord;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        if(SharedPreferencesHelper.getStdInfo(this)){
+            Log.d("name", AppParams.name);
+            Log.d("School",AppParams.School);
+            Log.d("classRoom",AppParams.classRoom);
+            finish();
+            Intent intent=new Intent(LoginActivity.this,PhoneActivity.class);
+            startActivity(intent);
+        }
+        setContentView(R.layout.avtivity_login);
+        loginid_et= (EditText) findViewById(R.id.loginid_et);
+        loginpswd_et= (EditText) findViewById(R.id.loginpswd_et);
+        login_ok_btn= (Button) findViewById(R.id.login_ok_btn);
 
-        //设置actionBar的标题
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2196f3")));
-        actionBar.setTitle("学工部主页");
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
-
-        webView= (WebView) findViewById(R.id.login_webView);
-
-
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(AppParams.loginAddress);
-
-        webView.setWebViewClient(new WebViewClient() {
+        login_ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // TODO Auto-generated method stub
-                view.loadUrl(url);// 使用当前WebView处理跳转
-                return true;//true表示此事件在此处被处理，不需要再广播
-            }
+            public void onClick(View v) {
+                stNumber = loginid_et.getText().toString();
+                stPassWord = loginpswd_et.getText().toString();
+                if (TextUtils.isEmpty(stNumber) || TextUtils.isEmpty(stNumber)) {
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("善意的提醒")
+                            .setPositiveButton("确定", null)
+                            .setMessage("请输入完整的学号或者密码")
+                            .show();
+                } else {
+                    HttpUtility.loginHttpRequest(AppParams.newLoginAddress, stNumber, stPassWord, new CallBack() {
+                        @Override
+                        public void onStart() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ProgressDialogHelper.showProgressDialog(LoginActivity.this, "正在登陆...");
+                                }
+                            });
 
-            @Override   //转向错误时的处理
-            public void onReceivedError(WebView view, int errorCode,
-                                        String description, String failingUrl) {
-                // TODO Auto-generated method stub
-                Toast.makeText(LoginActivity.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFinsh(final String response) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if ("ok".equals(response)) {
+                                        ProgressDialogHelper.closeProgressDialog();
+                                        SharedPreferencesHelper.saveStdInfo(LoginActivity.this);
+                                        finish();
+                                        Intent intent = new Intent(LoginActivity.this, PhoneActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        ProgressDialogHelper.closeProgressDialog();
+                                        new AlertDialog.Builder(LoginActivity.this)
+                                                .setTitle("善意的提醒")
+                                                .setPositiveButton("确定", null)
+                                                .setMessage("密码错误")
+                                                .show();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
 
-    }
 
-    @Override   //默认点回退键，会退出Activity，需监听按键操作，使回退在WebView内发生
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
-            webView.goBack();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

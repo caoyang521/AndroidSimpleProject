@@ -11,11 +11,12 @@ import java.util.ArrayList;
 import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.Model.PeopleInfo;
+import three.com.phoneservice.Params.AppParams;
 
 /**
  * Created by Administrator on 2015/9/24.
  */
-public class Utility {
+public class HandleResponseUtility {
 
 
     public synchronized static boolean handlePersonResponse(Db db, ArrayList<PeopleInfo> phoneInfos,CallBack callBack){
@@ -36,6 +37,17 @@ public class Utility {
             return false;
         }
         return isover;
+    }
+
+    public static void handleLoginResponse(String response){
+        String[] info =response.split(",");
+
+        AppParams.name=info[1];
+        AppParams.School=info[3];
+        AppParams.classRoom=info[5];
+        Log.d("name",AppParams.name);
+        Log.d("School",AppParams.School);
+        Log.d("classRoom",AppParams.classRoom);
     }
 
 }
