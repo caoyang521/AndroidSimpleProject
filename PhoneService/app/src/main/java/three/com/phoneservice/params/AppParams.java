@@ -21,4 +21,8 @@ public class AppParams {
 
     public static String SchoolNumber="";
 
+    public static String Appkey="565bfa0e67e58edd4b00405c";
+
+    public static String AppMasterSecret="bfwjzvu10b30vyjekzz0pk8umtjix7bn";
+
 }

@@ -4,9 +4,11 @@ package three.com.phoneservice.Utility;
  * Created by Administrator on 2015/11/12.
  */
 
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class ViewHolder {
+    public CheckBox selected;
     public TextView head_name_tv;
     public TextView class_name_tv;
     public TextView phone_number_tv;

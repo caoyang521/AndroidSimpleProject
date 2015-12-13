@@ -16,8 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-    }
+
 
 }
 
@@ -28,4 +27,6 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile files('lib/com.umeng.message.lib_v2.5.0.jar')
     compile files('lib/umeng-update-v2.6.0.1.jar')
+    compile 'org.apache.directory.studio:org.apache.commons.codec:1.8'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 }

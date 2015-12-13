@@ -40,7 +40,7 @@ public class HandleResponseUtility {
     }
 
     public static void handleLoginResponse(String response){
-        String[] info =response.split(",");
+        String[] info =response.split("|");
 
         AppParams.name=info[1];
         AppParams.School=info[3];

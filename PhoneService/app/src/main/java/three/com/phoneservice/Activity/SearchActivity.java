@@ -55,8 +55,7 @@ public class SearchActivity extends AppCompatActivity {
 
         search_list= (ListView) findViewById(R.id.search_listView);
         no_preson_tv= (TextView) findViewById(R.id.no_person);
-        phoneAdapter=new PhoneAdapter(this,phoneInfos);
-        search_list.setAdapter(phoneAdapter);
+
 
         //设置actionBar的标题
         ActionBar actionBar = getSupportActionBar();
@@ -152,6 +151,11 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         if(DbHolder.db.loadPhoneInfoByName(query, phoneInfos)){
+            if(phoneAdapter==null){
+                phoneAdapter=new PhoneAdapter(this,phoneInfos,null);
+                search_list.setAdapter(phoneAdapter);
+            }
+
             phoneAdapter.notifyDataSetChanged();
         }
         else

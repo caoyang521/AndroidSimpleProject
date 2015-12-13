@@ -7,6 +7,10 @@
         android:icon="@mipmap/ic_search_white_24dp"
         app:showAsAction="always" />
 
+    <item android:id="@+id/action_send"
+        android:title="@string/action_send"
+        app:showAsAction="never"  />
+
     <item android:id="@+id/action_login"
         android:title="@string/action_login"
         app:showAsAction="never"  />

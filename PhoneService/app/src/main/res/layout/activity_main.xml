@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.myc_appdemo_treelistview.MainActivity"
+    android:background="#ececec">
+
+    <com.jinwang.umthink.swipemenu.SwipeMenuListView
+				android:id="@+id/main_listview"
+	        	android:layout_width="match_parent"
+	        	android:layout_height="wrap_content"
+	        	android:paddingLeft="0dp"
+	        	android:paddingRight="0dp"
+	        	android:paddingTop="1px"
+	        	android:paddingBottom="1px"
+	        	android:divider="#c8c7cc"
+	        	android:dividerHeight="1px"
+	        	android:scrollbars="none"/>
+
+</RelativeLayout>

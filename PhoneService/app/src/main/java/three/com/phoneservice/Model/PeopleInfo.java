@@ -12,6 +12,7 @@ public class PeopleInfo {
     private String phoneNumber;
     private String className;
     private int hasBeenCalled=0;
+    private boolean isChecked=false;
 
     public String getClassName() {
         return className;
@@ -60,5 +61,13 @@ public class PeopleInfo {
 
     public void setHasBeenCalled(int hasBeenCalled) {
         this.hasBeenCalled = hasBeenCalled;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(boolean isChecked) {
+        this.isChecked = isChecked;
     }
 }

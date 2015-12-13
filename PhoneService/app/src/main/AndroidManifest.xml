@@ -40,6 +40,7 @@
         <activity android:name=".Activity.PhoneActivity">
 
         </activity>
+        <activity android:name=".Activity.SendActivity"></activity>
         <activity android:name=".Activity.SearchActivity"></activity>
         <activity android:name=".Activity.WebLoginActivity"></activity>
         <activity android:name=".Activity.LoginActivity">

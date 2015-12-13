@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import three.com.phoneservice.Model.PeopleInfo;
@@ -18,12 +20,14 @@ import three.com.phoneservice.Utility.ViewHolder;
  */
 public class PhoneAdapter extends BaseAdapter{
 
-    private Context context;
-    private ArrayList<PeopleInfo> phoneInfos =new ArrayList<PeopleInfo>();
 
-    public PhoneAdapter(Context context, ArrayList<PeopleInfo> phoneInfos) {
+    private Context context;
+    private List<PeopleInfo> phoneInfos =new ArrayList<PeopleInfo>();
+    private String type;
+    public PhoneAdapter(Context context, List<PeopleInfo> phoneInfos,String type) {
         this.context = context;
         this.phoneInfos = phoneInfos;
+        this.type=type;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class PhoneAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if(convertView == null) {
             holder = new ViewHolder();
@@ -52,6 +56,7 @@ public class PhoneAdapter extends BaseAdapter{
             holder.phone_number_tv = (TextView) convertView.findViewById(R.id.phone_number_tv);
             holder.name_tv = (TextView) convertView.findViewById(R.id.name_tv);
             holder.school_number_tv= (TextView) convertView.findViewById(R.id.school_number_tv);
+            holder.selected= (CheckBox) convertView.findViewById(R.id.list_select);
             convertView.setTag(holder);
         }
         else {
@@ -81,10 +86,18 @@ public class PhoneAdapter extends BaseAdapter{
             circleShape = R.drawable.circle_amber;
             color = context.getResources().getColor(R.color.amber_500);
         }
-
-
-        PeopleInfo phoneInfo= phoneInfos.get(position);
-
+        if("send".equals(type)){
+            holder.selected.setVisibility(View.VISIBLE);
+        }
+        final PeopleInfo phoneInfo= phoneInfos.get(position);
+        holder.selected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox cb= (CheckBox) v;
+                phoneInfo.setIsChecked(cb.isChecked());
+            }
+        });
+        holder.selected.setChecked(phoneInfo.isChecked());
         holder.head_name_tv.setBackgroundResource(circleShape);
         holder.head_name_tv.setText(phoneInfo.getPeopleName().substring(0,1));
         holder.class_name_tv.setText(phoneInfo.getClassName());

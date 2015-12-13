@@ -74,6 +74,8 @@ public class PhoneActivity extends AppCompatActivity{
                 try {
 
                     mPushAgent.addAlias(AppParams.SchoolNumber, "KYZS");
+                    //mPushAgent.getTagManager().add(AppParams.className);
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -91,7 +93,7 @@ public class PhoneActivity extends AppCompatActivity{
         import_btn= (Button) findViewById(R.id.import_btn);
         noPhoneHistory_tv= (TextView) findViewById(R.id.no_phone_history);
         phone_lv= (ListView) findViewById(R.id.phone_lv);
-        phoneAdapter=new PhoneAdapter(this,phoneInfos);
+        phoneAdapter=new PhoneAdapter(this,phoneInfos,null);
         DbHolder.db=Db.getInstance(this);
         if(!isWorked()) {
             Intent phoneservice = new Intent(this, PhoneServer.class);
@@ -327,6 +329,12 @@ public class PhoneActivity extends AppCompatActivity{
         else if(id==R.id.action_login){
             Intent loginIntent =new Intent(PhoneActivity.this,WebLoginActivity.class);
             startActivity(loginIntent);
+            return true;
+        }
+        else if(id==R.id.action_send){
+            Intent sendIntent =new Intent(PhoneActivity.this,SendActivity.class);
+            startActivity(sendIntent);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
