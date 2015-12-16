@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/lamp_mainLayout"
+    android:paddingBottom="5dp">
+    <ImageView 
+        android:id="@+id/lamp_headPhoto" 
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/main_lamp"/>
+    <TextView
+        android:id="@+id/lamp_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="灯"
+        android:layout_alignTop="@id/lamp_headPhoto"
+        android:layout_toRightOf="@id/lamp_headPhoto"
+        android:textColor="#3f3f3f"
+        android:paddingTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:maxEms="6"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+    <TextView 
+        android:id="@+id/lamp_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_lamp_shape"
+        android:layout_alignTop="@id/lamp_name"
+        android:layout_toRightOf="@id/lamp_name"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textSize="15dp"
+        android:text="卧室"
+        android:drawableLeft="@drawable/main_place_img"/>
+    <TextView
+        android:id="@+id/lamp_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lamp_content"
+        android:layout_toRightOf="@id/lamp_headPhoto"
+        android:layout_below="@id/lamp_name"
+        android:textColor="#7d899a"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="15dp"
+        android:drawableLeft="@drawable/main_lamp_switch"/>
+    <TextView
+        android:layout_alignTop="@id/lamp_headPhoto"
+        android:id="@+id/lamp_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lamp_date"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:textColor="#83868d"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        />
+    <TextView
+        android:layout_below="@id/lamp_data"
+        android:id="@+id/lamp_date_explain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lamp_date_explain"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:textColor="#414141"
+        android:textSize="25sp"
+        />
+    <!-- <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="90dp"
+        android:layout_below="@id/lamp_headPhoto"
+        android:layout_marginTop="14dp"
+        android:background="#c8c7cc"/> -->
+    <!-- <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:layout_below="@id/lamp_headPhoto"
+        android:layout_marginTop="5dp"
+        android:background="#676668"/> -->
+ 
+    <!-- <LinearLayout android:orientation="vertical"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content">
+ 
+        <TextView android:id="@+id/title" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:textColor="#FFFFFFFF"
+            android:textSize="22px" />
+        <TextView android:id="@+id/info" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:textColor="#FFFFFFFF"
+            android:textSize="13px" />
+ 
+    </LinearLayout> -->
+ 
+ 
+    <!-- <Button android:id="@+id/view_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="more"
+        android:layout_gravity="bottom|right" /> -->
+</RelativeLayout>

@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +20,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.jinwang.umthink.swipemenu.SwipeMenu;
+import com.jinwang.umthink.swipemenu.SwipeMenuAdapter;
+import com.jinwang.umthink.swipemenu.SwipeMenuCreator;
+import com.jinwang.umthink.swipemenu.SwipeMenuItem;
+import com.jinwang.umthink.swipemenu.SwipeMenuListView;
+import com.umeng.message.PushAgent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import three.com.phoneservice.Adapter.PhoneAdapter;
@@ -41,6 +49,14 @@ public class SendActivity extends AppCompatActivity {
     private ArrayList<PeopleInfo> PeopleData=new ArrayList<PeopleInfo>();
     private ArrayList<String> classData=null;
     private EditText content_et;
+
+    private SwipeMenuListView mListView;
+
+    private ArrayList<HashMap<String, Object>> mListItem;  //分组信息
+
+    private ArrayList<ArrayList<HashMap<String, Object>>> mChildListItem; // 设备分类信息
+
+    private SwipeMenuAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +84,12 @@ public class SendActivity extends AppCompatActivity {
 //        //文字颜色
 //        tabs.setTextColor(Color.parseColor("#88ffffff"));
         //指示条颜色
-        tabs.setIndicatorColor(Color.WHITE);
+        tabs.setIndicatorColor(R.color.blue_500);
         //指示条高度
         tabs.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
         //最下面的分隔条
 //        pagerSlidingTabStrip.setUnderlineHeight(0);
-        tabs.setUnderlineColorResource(R.color.blue_500);
+       // tabs.setUnderlineColorResource(R.color.blue_500);
         //字体样式
 //        pagerSlidingTabStrip.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
         //分隔条颜色
@@ -94,10 +110,140 @@ public class SendActivity extends AppCompatActivity {
             }
         }).start();
 
+        final PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.enable();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Log.d("youmeng", String.valueOf(mPushAgent.getTagManager().list()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
 
+
+        mListView = new SwipeMenuListView(this);
+        mListView.setDivider(getResources().getDrawable(android.R.color.darker_gray));
+        mListView.setDividerHeight(1);
+
+        initEvens();
     }
 
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
+    }
+
+    private void initEvens() {
+        // TODO Auto-generated method stub
+
+        //mListView=(SwipeMenuListView)findViewById(R.id.main_listview);
+
+        SwipeMenuCreator creator=new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                // TODO Auto-generated method stub
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+                        0xCE)));
+                // set item width
+                openItem.setWidth(dp2px(90));
+                // set item title
+                openItem.setTitle("Change");
+                // set item title fontsize
+                openItem.setTitleSize(18);
+                // set item title font color
+                openItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(openItem);
+
+                // create "delete" item
+                com.jinwang.umthink.swipemenu.SwipeMenuItem deleteItem = new com.jinwang.umthink.swipemenu.SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));//249,63,37
+                // set item width
+                deleteItem.setWidth(dp2px(80));
+                // set a icon
+                deleteItem.setIcon(R.drawable.ic_delete);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+
+
+            }
+        };
+        mListView.setMenuCreator(creator);
+
+        initDatas();
+
+        //mAdapter = new SwipeMenuAdapter(this,mListItem,mChildListItem);
+//    	mAdapter = new MainActivityListViewAdapter(this,mListItem);
+        mListView.setAdapter(mListItem,mChildListItem);
+
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnSwipeMenuItemClickListener() {
+            @Override
+            public void onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        Toast.makeText(getApplicationContext(), "修改他", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getApplicationContext(), "就删除了", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
+    }
+    private void initDatas() {
+        // TODO Auto-generated method stub
+        mListItem=new ArrayList<HashMap<String,Object>>();
+        mChildListItem=new ArrayList<ArrayList<HashMap<String,Object>>>();
+
+        for(int i=0;i<3;i++){
+            HashMap<String, Object> listMap= new HashMap<String, Object>();
+            ArrayList<HashMap<String, Object>> childList=new ArrayList<HashMap<String,Object>>();
+            listMap.put("groupName", "组名"+i);
+            listMap.put("groupNumber", "项目数[" + i + "/10]");
+            mListItem.add(listMap);
+
+            for(int j=0;j<2;j++){
+                HashMap<String, Object> childMap=new HashMap<String, Object>();
+                childMap.put("lamp_headPhoto", j==0?R.drawable.main_lamp:R.drawable.main_dehumidifier);
+                childMap.put("lamp_name", j==0?"卧室灯":"除湿器");
+                childMap.put("lamp_place", "卧室");
+                childMap.put("lamp_date", j==0?"亮度":"湿度");
+                childMap.put("lamp_content", "已开");
+                childMap.put("lamp_date_explain", 57+"%");
+                childList.add(childMap);
+            }
+            mChildListItem.add(childList);
+        }
+
+		/*HashMap<String,Object> map1=new HashMap<String,Object>();
+		map1.put("lamp_headPhoto", R.drawable.main_lamp);
+    	map1.put("lamp_name", "卧室灯");
+    	map1.put("lamp_place", "卧室");
+    	map1.put("lamp_date", "亮度");
+    	map1.put("lamp_content", "已开");
+    	map1.put("lamp_date_explain", 57+"%");
+    	mListItem.add(map1);
+    	HashMap<String,Object> map2=new HashMap<String,Object>();
+		map2.put("lamp_headPhoto", R.drawable.main_dehumidifier);
+    	map2.put("lamp_name", "除湿器");
+    	map2.put("lamp_place", "客厅");
+    	map2.put("lamp_date", "湿度");
+    	map2.put("lamp_content", "已开");
+    	map2.put("lamp_date_explain", 50+"%");
+    	mListItem.add(map2);*/
+    }
     private void initViewPager() {
         //ViewPager init
         vpAdapter= new ViewPagerAdapter(this);
@@ -119,7 +265,7 @@ public class SendActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
 
         @Override
@@ -130,25 +276,27 @@ public class SendActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return "学生";
+                return "本班学生";
             } else {
-                return "班级";
+                return "分类";
             }
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ListView listView=null;
-            if(position==0){
-                listView = getDataListView(context, PeopleData);
-                container.addView(listView);
-            }
-//            else{
-//                listView = getClassListView(context, classData);
-//                container.addView(listView);
-//            }
 
-            return listView;
+
+            if(position==0){
+                ListView listView = getDataListView(context, PeopleData);
+                container.addView(listView);
+                return listView;
+            }
+            else{
+                container.addView(mListView);
+                return  mListView;
+            }
+
+
 
         }
 
@@ -168,11 +316,11 @@ public class SendActivity extends AppCompatActivity {
     private ListView getDataListView(Context context, List<PeopleInfo> list) {
         if(list!=null){
             phoneAdapter=new PhoneAdapter(context, list,"send");
-            ListView coursesList = new ListView(context);
-            coursesList.setDivider(getResources().getDrawable(android.R.color.transparent));
-            coursesList.setDividerHeight(0);
-            coursesList.setAdapter(phoneAdapter);
-            return coursesList;
+            ListView stdListView = new ListView(context);
+            stdListView.setDivider(getResources().getDrawable(android.R.color.transparent));
+            stdListView.setDividerHeight(0);
+            stdListView.setAdapter(phoneAdapter);
+            return stdListView;
         }
         else
             return null;
@@ -217,16 +365,17 @@ public class SendActivity extends AppCompatActivity {
         final StringBuilder alias=new StringBuilder();
         for(int i=0;i<PeopleData.size();i++){
             if(PeopleData.get(i).isChecked()){
-                alias.append(PeopleData.get(i).getSchoolNumber());
+                alias.append(PeopleData.get(i).getSchoolNumber()+",");
             }
         }
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     UmengHelper umengHelper = new UmengHelper(AppParams.Appkey, AppParams.AppMasterSecret);
                     //umengHelper.sendAndroidUnicast();
-                    umengHelper.sendAndroidCustomizedcast(alias.toString(),content_et.getText().toString());
+                    umengHelper.sendAndroidCustomizedcast(alias.substring(0,alias.length()-1).toString(),content_et.getText().toString());
                     //umengHelper.sendAndroidBroadcast();
                     //umengHelper.sendAndroidGroupcast();
                 }

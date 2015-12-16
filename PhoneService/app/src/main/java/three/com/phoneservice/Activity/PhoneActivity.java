@@ -74,8 +74,7 @@ public class PhoneActivity extends AppCompatActivity{
                 try {
 
                     mPushAgent.addAlias(AppParams.SchoolNumber, "KYZS");
-                    //mPushAgent.getTagManager().add(AppParams.className);
-
+                    mPushAgent.getTagManager().add(AppParams.className);
 
                 } catch (Exception e) {
                     e.printStackTrace();

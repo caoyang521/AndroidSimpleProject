@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">优么</string>
+    <string name="hello_world">Hello world2!</string>
+    <string name="action_settings">Settings</string>
+    <!-- 账号管理提示信息 -->
+    <string name="accout_management_message">消息中心正在开发</string>
+    <!-- 修改密码提示信息 -->
+    <string name="changepassword_toolbar">密码修改</string>
+    <string name="changepassword_password_oldhint">原始密码</string>
+    <string name="changepassword_password_old">输入密码</string>
+    <string name="changepassword_password_newhint">新密码</string>
+    <string name="changepassword_password_new">支持6-12位英文字母、数字</string>
+    <string name="changepassword_password_surehint">确认密码</string>
+    <string name="changepassword_password_sure">再次输入密码</string>
+    <string name="changepassword_confirmbutton">确认</string>
+    <string name="changepassword_password_oldnull">原密码为空</string>
+    <string name="changepassword_password_newnull">新密码为空</string>
+    <string name="changepassword_password_surenull">确认密码为空</string>
+    <string name="changepassword_newinconsistentconfirm">两次输入密码不一致</string>
+    <string name="changepassword_oldpassword_error">原密码错误</string>
+    <string name="changepassword_pleaseinput_oldpassword">请输入原密码</string>
+    <string name="changepassword_pleaseinput_newpassword">原密码错误</string>
+    <string name="changepassword_pleaseinput_confirmpassword">原密码错误</string>
+    
+    <string name="changepassword_title">修改密码</string>
+    <string name="changepassword_oldpassword_hint">请输入原密码</string>
+    <string name="changepassword_newpassword_hint">请输入新密码</string>
+    <string name="changepassword_confirmpassword_hint">确认新密码</string>
+    
+    <!-- 空调品牌及选择 -->
+    <string name="air_flatplate_selection">品牌选择</string>
+    <string name="air_flatplate_gree">格力</string>
+    <string name="air_flatplate_midea">美的</string>
+    <string name="air_flatplate_aux">奥克斯</string>
+    <string name="air_flatplate_haier">海尔</string>
+    <string name="air_flatplate_galanz">格兰仕</string>
+    <string name="air_flatplate_kelon">科龙</string>
+    <string name="air_flatplate_daikin">大金</string>
+    <string name="air_flatplate_chigo">志高</string>
+    <string name="air_flatplate_hisense">海信</string>
+    <string name="air_flatplate_tcl">TCL</string>
+    <string name="air_flatplate_mitsubishi">三菱</string>
+    <string name="air_flatplate_leader">统帅</string>
+    <string name="air_flatplate_changhong">长虹</string>
+    <string name="air_flatplate_fujitsu">富士通</string>
+    <string name="air_flatplate_yair">扬子</string>
+    <string name="air_flatplate_konka">康佳</string>
+    
+   <!-- wifi开启对话框的相关提示信息 -->
+    <string name="open_wifi_dialog_title">Warning: Wi-Fi Disabled!</string>
+    <string name="current_ssid">Current SSID is: </string>
+    <string name="wifi_enabled_not_login">WiFI is enabled,but not login in!</string>
+    
+
+    <string name="tip_exit">再按一次退出程序</string>
+    <string name="wifi_password_empty">请输入WiFi密码</string>
+    <string name="simple_config_start">开始连接</string>
+    <string name="simple_config_success">WiFi配置成功</string>
+    <string name="simple_config_fail">WiFi配置失败,请重试</string>
+    <string name="simple_config_progress_title_1">正在配置Wi-Fi模块……</string>
+    <string name="simple_config_progress_title_2">正在重启Wi-Fi模块……</string>
+    
+    <!-- 用户登陆提示信息 -->
+    <string name="login_username_isnull">用户名为空</string>
+    <string name="login_password_isnull">密码为空</string>
+    <string name="login_webnet_error">网络连接中断,请查看网络</string>
+    <string name="login_logo">优么·科技</string>
+    <!-- 退出登录diadog -->
+    <string name="main_quit_title">退出系统</string>
+    <string name="main_quit_message">确定要退出吗？</string>
+    <string name="main_quit_confirm">确定</string>
+    <string name="main_quit_cancel">取消</string>
+  <!--   手势密码绘制 -->
+  	<string name="gesture_toolbar">手势设置</string>
+  	<string name="gesture_open">启用手势密码</string>
+  	<string name="gesture_change">修改手势密码</string>
+    <string name="gesture_verify_error">密码错误</string>
+    <string name="gesture_edit_first_error">最少链接4个点, 请重新输入</string>
+    <string name="gesture_verify_resetpassword">重新设置密码</string>
+    <string name="gesture_edit_next_error">与上一次绘制不一致，请重新绘制</string>
+    <string name="gesture_edit_initial_resettext">与上一次绘制不一致，请重新绘制</string>
+    <string name="gesture_edit_initial_tiptext">绘制解锁图案</string>
+    <!-- 修改设备名字-->
+    <string name="maindc_toolbartext">设备名称编辑</string>
+    <string name="maindc_hintname">编辑智能家居名称</string>
+    <!-- 关于界面信息 -->
+    <string name="about_toolbartext">关于</string>
+    <string name="aboult_nowversion">当前版本为1.7.0</string>
+    <string name="abount_company">浙江优么物联网科技有限公司 </string>
+    <string name="abount_companywebsite">http://www.umthink.com.cn</string>
+    <string name="abount_aftersalecall">售后电话：400-000-000</string>
+    <string name="abount_wechatservicenumber">微信服务号：umthink888</string>
+    <string name="abount_wechatpublicnumber">微信公众号：umthink888</string>
+    <string name="aboult_explain">服务条款和隐私说明</string>
+    <!-- 空调控制界面 -->
+    <string name="aircontroltoolbar_textview">空调控制</string>
+    <string name="aircontrol_choseair">选 择 空 调 品 牌</string>
+    <string name="aircontrol_state">待机</string>
+    <!-- 连接新设备界面 -->
+    <string name="connectnewdevicetoolbar_textview">智能连接</string>
+    <string name="connectnewdevice_surewifi">确认手机已连上wifi</string>
+    <string name="connectnewdevice_allocationhint">请将设备进入</string>
+    <string name="connectnewdevice_allocationtext">配置模式</string>
+    <string name="connectnewdevice_nowwifihint">当前网络：</string>
+    <string name="connectnewdevice_nowwifitext">Umthink-Link</string>
+    <string name="connectnewdevice_nowwifipassword">输入密码</string>
+    <string name="connectnewdevice_btnBegin">开始连接</string>
+    <string name="connectnewdevice_wifitypehint">当前版本仅支持wifi为2.4GHz</string>
+    <!-- 场景创建 -->
+    <string name="createtoolbar_textview">创建情景</string>
+    <string name="createscene_icontext">选择图标 </string>
+    <string name="createscene_nametext">情景名称</string>
+    <string name="createscene_namecontent">输入场景名称</string>
+    <string name="createscene_triggerconditiontext">1/2 : </string>
+    <string name="createscene_triggerconditioncontent">设置触发条件</string>
+    <string name="createscene_conditioncontent">手动模式</string>
+    <string name="createscene_executetasktext">2/2 : </string>
+    <string name="createscene_executetaskcontent">设置执行任务</string>
+    <string name="createscene_executetaskicon">添加设备</string>
+    <string name="createscene_taskcontent">智能插座</string>
+    <string name="createscene_taskswitch">开启</string>
+    <!-- 忘记密码界面 -->
+    <string name="forgetpasswordtoolbar_textview">修改密码</string>
+    <string name="forgetpassword_usernamehint">手机号码:</string>
+    <string name="forgetpassword_phonehint">请输入手机号码</string>
+    <string name="forgetpassword_texthint">验证码</string>
+    <string name="forgetpassword_text">请输入短信验证码</string>
+    <string name="forgetpassword_gettext">获取验证码</string>
+    <string name="forgetpassword_passwordhint">设置密码</string>
+    <string name="forgetpassword_passwordtext">支持6-12位英文字谜、数字</string>
+    <string name="forgetpassword_surepasswordhint">确认密码</string>
+    <string name="forgetpassword_surepasswordtext">再次输入密码</string>
+    <string name="forgetpassword_button">修改密码</string>
+    <!-- 手势验证码设置 -->
+    <string name="gestureedittoolbar_textview">手势密码</string>
+    <string name="gestureedit_tip">绘制解锁图案</string>
+    <string name="gestureedit_reset">绘制手势密码，防止他人未经授权查看</string>
+    <!-- 手势密码验证 -->
+    <string name="gestureverify_username">188****8493</string>
+    <string name="gestureverify_forgetpassword">管理手势</string>
+    <!-- 设置界面 -->
+    <string name="installtoolbar_textview">设置</string>
+    <string name="installtoolbar_ajzd_text">按键震动</string>
+    <string name="installtoolbar_ajsy_text">按键声音</string>
+    <string name="installtoolbar_ssmm_text">手势密码</string>
+    <!-- 灯管理界面 -->
+    <string name="lamptoolbar_textview">LED灯</string>
+    <string name="lamp_connectdevicemain_text">关联设备</string>
+    <string name="lamp_cdbutton">添加设备</string>
+    <string name="lamp_openposition_text">每次开启状态</string>
+    <string name="lamp_openposotion_colortext">颜色</string>
+    <string name="lamp_openposotion_statustext">亮度</string>
+    <string name="lamp_openposotion_model">金碧辉煌</string>
+    <string name="lamp_timesunday">日</string>
+    <string name="lamp_timemonday">一</string>
+    <string name="lamp_timetuesday">二</string>
+    <string name="lamp_timewednesday">三</string>
+    <string name="lamp_timethursday">四</string>
+    <string name="lamp_timefriday">五</string>
+    <string name="lamp_timesaturday">六</string>
+    <string name="lamp_openposotion_modeltext">模式</string>
+    <string name="lamp_model_text">模式</string>
+    <string name="lamp_switch_open">开</string>
+    <string name="lamp_switch_close">开</string>
+    <string name="lamp_toning_text">调色</string>
+    <string name="lamp_light_text">亮度调整</string>
+    <string name="lamp_timing_text">定时</string>
+    <string name="lamp_open_text">开启</string>
+    <string name="lamp_open_time">--:--</string>
+    <string name="lamp_off_text">关闭</string>
+    <string name="lamp_off_time">--:--</string>
+    <string name="lamp_time_distance">00:00</string>
+    <string name="lamp_time_next">后</string>
+    <string name="lamp_time_openoroff">开/关</string>
+    <string name="lamp_pickcolor_title">选择颜色</string>
+    <string name="lamp_login_success">连接成功</string>
+    <string name="lamp_login_fail">连接失败</string>
+    
+    <string name="lamp_model_1">金碧辉煌</string>
+    <string name="lamp_model_2">人约黄昏</string>
+    <string name="lamp_model_3">刹那芳华</string>
+    <string name="lamp_model_4">蓝色港湾</string>
+    <string name="lamp_model_5">冬日恋歌</string>
+    <string name="lamp_model_6">绿野仙踪</string>
+    <string name="lamp_model_7">烛光晚餐</string>
+    <string name="lamp_model_8">夜店迷情</string>
+  	<string name="lamp_model_9">七色彩虹</string>
+
+  <!--   登陆界面 -->
+  	<string name="login_username_hint">请输入用户名</string>
+  	<string name="login_password_hint">请输入密码</string>
+    <string name="login_textview_style">umthink</string>
+    <string name="login_forgetpassword">忘记密码</string>
+    <string name="login_setuser">注册账号</string>
+    <string name="login_button">登 录</string>
+    <!-- 主页 -->
+    <string name="maintoolbar_textview">主页</string>
+    <string name="mainleft_zhgltext">账号管理</string>
+    <string name="mainleft_sctext">商城</string>
+    <string name="mainleft_tctext">吐槽</string>
+    <string name="mainleft_sztext">设置</string>
+    <string name="main_searching_devices">设备发现中……</string>
+    <string name="main_internet_search_device_timeout">从http服务器获取设备列表失败</string>
+   
+    <!-- 主界面页面切换 -->
+    <string name="mainviewpage_radio0">设备</string>
+    <string name="mainviewpage_radio1">场景</string>
+    <!-- 主界面 -->
+    <string name="main_device_not_connected">设备未链接，请检查网络！</string>
+    <!-- 模式界面 -->
+    <string name="modeltoolbar_textview">模式</string>
+    <!-- 图标选择界面 -->
+    <string name="iconselecttoolbar_textview">图标选择</string>
+    <!-- 执行设备添加-->
+    <string name="adddevicetoolbar_textview">增加设备</string>
+    <!-- 开启状态界面 -->
+    <string name="openstatus_textview">开启状态</string>
+    <string name="openstatus_lightset">亮度设置</string>
+    <string name="openstatus_toningset">颜色设置</string>
+    <string name="openstatus_modelset">模式选择</string>
+    <string name="openstatus_switch">设备开启状态</string>
+   <!--  注册界面 -->
+    <string name="registertoolbar_textview">注册</string>
+    <string name="register_usernamehint">手机号码</string>
+    <string name="register_texthint">验证码</string>
+    <string name="register_usernametexthint">请输入手机号码</string>
+    <string name="register_text">请输入短信验证码</string>
+    <string name="register_gettext">获取验证码</string>
+    <string name="register_passwordhint">设置密码</string>
+    <string name="register_passwordtexthint">支持6-12位英文字谜、数字</string>
+    <string name="register_surepasswordhint">确认密码</string>
+    <string name="register_surepasswordtexthint">再次输入密码</string>
+    <string name="register_button">提交</string>
+    <string name="register_username_null">手机账号不能为空</string>
+    <string name="register_telephoneId_null">未获取手机硬件ID</string>
+    <string name="register_password_null">密码不能为空</string>
+    <string name="register_surepassword_null">确认密码不能为空</string>
+    <string name="register_password_difference">两次密码输入不一致</string>
+    <string name="register_identifycode_null">验证码不能为空</string>
+    <!-- 场景界面 -->
+    <string name="scenetoolbar_textview">umthink</string>
+    <!-- 智能插座界面 -->
+    <string name="sockettoolbar_textview">智能插座</string>
+    <string name="socket_connectdevicetext">关联设备</string>
+    <string name="socket_switchtext">开关</string>
+    <string name="protecttext">手机充电保护</string>
+    <string name="socket_airctext">空调控制</string>
+    <string name="socket_airccontrol">控制</string>
+    <string name="socket_aircmodel">制冷</string>
+    <string name="socket_airctemp">26度</string>
+    <string name="socket_timingtext">定时</string>
+    <string name="socket_opentext">开 : </string>
+    <string name="socket_opentime">00:00</string>
+    <string name="socket_offtext">关 : </string>
+    <string name="socket_offtime">00:00</string>
+    <string name="socket_timedistance">00:00</string>
+    <string name="socket_timenext">后</string>
+    <string name="socket_timeopenoroff">开/关</string>
+    <!-- 定时启动界面 -->
+    <string name="timingstarttoolbar_textview">定时启动</string>
+    <string name="timingstart_timesettext">定时设置</string>
+    <string name="timingstart_minute">--</string>
+    <string name="timingstart_colon">:</string>
+    <string name="timingstart_hour">--</string>
+    <string name="timingstart_daytext">重复|每周</string>
+    <!-- 调色界面 -->
+    <string name="toningtoolbar_textview">调色</string>
+    <string name="txt_color">color</string>
+    <!-- 触发条件界面 -->
+    <string name="triggerconditiontoolbar_textview">触发条件</string>
+    <string name="triggercondition_gestruestartingtext">手势启动</string>
+    <string name="triggercondition_gestruestartingbutton">确定</string>
+    <string name="triggercondition_timingstartingtext">定时启动</string>
+    <string name="triggercondition_timingstartingbutton">确定</string>
+    <string name="triggercondition_humantelepathytext">人体感应</string>
+    <string name="triggercondition_humantelepathybutton">确定</string>
+    <string name="triggercondition_environmenttelepathytext">环境感应</string>
+    <string name="triggercondition_environmenttelepathybutton">确定</string>
+    <string name="triggercondition_magnetometertext">门磁</string>
+    <string name="triggercondition_magnetometerbutton">确定</string>
+    <!-- 账号管理界面 -->
+    <string name="zhgltoolbar_textview">账号管理</string>
+    <string name="zhgl_headname">Titanium</string>
+    <string name="zhgl_xxzxtext">消息中心</string>
+    <string name="zhgl_xgmmtext">修改密码</string>
+    <string name="zhgl_gytext">关于</string>
+    <string name="zhgl_loginoutbutton">退出登录</string>
+    <string name="zhgl_headdevice">您有0个绑定设备</string>
+    <!-- 关联灯界面 -->
+    <string name="lamp_cdname">卧室LED灯</string>
+    <string name="lamp_cdcontrol">取消关联</string>
+    <string name="loading_now">正在加载中...</string>
+    <!-- 设备灯 -->
+
+    <string name="lamp_useName">王小波</string>
+    <string name="lamp_date">已开</string>
+    <string name="lamp_date_explain">60%</string>
+    <string name="lamp_content">这是第一条消息</string>
+    <!-- 灯控制界面，LampActivity -->
+    <string name="lamp_binding_fail">设备绑定失败，请返回后重试</string>
+    <string name="lamp_tcp_shutdown">设备连接断开，请重新进入</string>
+	<string name="lamp_coldright">冷光</string>
+	<string name="lamp_neutrallight">中性</string>
+	<string name="lamp_warmlight">暖光</string>
+</resources>

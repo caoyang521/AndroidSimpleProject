@@ -25,5 +25,17 @@
         android:layout_height="wrap_content"
         android:hint="你想说的话..."
         android:layout_weight="0"/>
+
+    <com.jinwang.umthink.swipemenu.SwipeMenuListView
+        android:id="@+id/main_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="1px"
+        android:paddingBottom="1px"
+        android:divider="#c8c7cc"
+        android:dividerHeight="1px"
+        android:scrollbars="none"/>
 </LinearLayout>
 
