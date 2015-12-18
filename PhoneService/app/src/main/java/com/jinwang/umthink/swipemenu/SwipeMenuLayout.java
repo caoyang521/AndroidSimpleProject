@@ -50,13 +50,13 @@ public class SwipeMenuLayout extends FrameLayout {
 
 	public SwipeMenuLayout(View contentView, SwipeMenuView menuView,
 			Interpolator closeInterpolator, Interpolator openInterpolator) {
-		super(contentView.getContext());
-		mCloseInterpolator = closeInterpolator;
-		mOpenInterpolator = openInterpolator;
-		mContentView = contentView;
-		mMenuView = menuView;
-		mMenuView.setLayout(this);
-		init();
+			super(contentView.getContext());
+			mCloseInterpolator = closeInterpolator;
+			mOpenInterpolator = openInterpolator;
+			mContentView = contentView;
+			mMenuView = menuView;
+			mMenuView.setLayout(this);
+			init();
 	}
 
 	// private SwipeMenuLayout(Context context, AttributeSet attrs, int
@@ -201,6 +201,7 @@ public class SwipeMenuLayout extends FrameLayout {
 	}
 
 	private void swipe(int dis) {
+
 		if (dis > mMenuView.getWidth()) {
 			dis = mMenuView.getWidth();
 		}
@@ -212,6 +213,7 @@ public class SwipeMenuLayout extends FrameLayout {
 		mMenuView.layout(mContentView.getWidth() - dis, mMenuView.getTop(),
 				mContentView.getWidth() + mMenuView.getWidth() - dis,
 				mMenuView.getBottom());
+
 	}
 
 	@Override
@@ -237,6 +239,7 @@ public class SwipeMenuLayout extends FrameLayout {
 	}
 
 	public void smoothOpenMenu() {
+
 		state = STATE_OPEN;
 		mOpenScroller.startScroll(-mContentView.getLeft(), 0,
 				mMenuView.getWidth(), 0, 350);
