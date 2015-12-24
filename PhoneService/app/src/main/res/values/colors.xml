@@ -99,4 +99,5 @@
     <color name="eeeeee">#eeeeee</color>
 
     <color name="mainColor">@color/blue_500</color>
+    <color name="windows_color">#F5F5F5</color>
 </resources>

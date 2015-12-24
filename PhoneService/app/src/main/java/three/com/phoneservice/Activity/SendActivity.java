@@ -1,6 +1,7 @@
 package three.com.phoneservice.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.jinwang.umthink.swipemenu.SwipeMenuAdapter;
 import com.jinwang.umthink.swipemenu.SwipeMenuCreator;
 import com.jinwang.umthink.swipemenu.SwipeMenuItem;
 import com.jinwang.umthink.swipemenu.SwipeMenuListView;
+import com.melnykov.fab.FloatingActionButton;
 import com.umeng.message.PushAgent;
 
 import java.util.ArrayList;
@@ -52,11 +54,13 @@ public class SendActivity extends AppCompatActivity {
 
     private SwipeMenuListView mListView;
 
-    private ArrayList<HashMap<String, Object>> mListItem;  //分组信息
+    public static ArrayList<HashMap<String, Object>> mListItem;  //分组信息
 
-    private ArrayList<ArrayList<HashMap<String, Object>>> mChildListItem; // 设备分类信息
+    public static ArrayList<ArrayList<HashMap<String, Object>>> mChildListItem; // 设备分类信息
 
     private SwipeMenuAdapter mAdapter;
+
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,24 +80,13 @@ public class SendActivity extends AppCompatActivity {
         }
         pager = (ViewPager) findViewById(R.id.viewPager);
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tab_indicator);
-
         content_et= (EditText) findViewById(R.id.content_et);
+        fab = (FloatingActionButton) findViewById(R.id.send_add_fab);
 
-//        //文字大小
-//        tabs.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics()));
-//        //文字颜色
-//        tabs.setTextColor(Color.parseColor("#88ffffff"));
         //指示条颜色
         tabs.setIndicatorColor(R.color.blue_500);
         //指示条高度
         tabs.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
-        //最下面的分隔条
-//        pagerSlidingTabStrip.setUnderlineHeight(0);
-       // tabs.setUnderlineColorResource(R.color.blue_500);
-        //字体样式
-//        pagerSlidingTabStrip.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
-        //分隔条颜色
-        //tabs.setDividerColor(getResources().getColor(R.color.blue_500));
 
         new Thread(new Runnable() {
             @Override
@@ -129,6 +122,14 @@ public class SendActivity extends AppCompatActivity {
         mListView.setDivider(getResources().getDrawable(android.R.color.darker_gray));
         mListView.setDividerHeight(1);
 
+        fab.attachToListView(mListView);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startAddActivity = new Intent(SendActivity.this,AddActivity.class);
+                startActivity(startAddActivity);
+            }
+        });
         initEvens();
     }
 
@@ -207,52 +208,52 @@ public class SendActivity extends AppCompatActivity {
         mListItem=new ArrayList<HashMap<String,Object>>();
         mChildListItem=new ArrayList<ArrayList<HashMap<String,Object>>>();
 
-        for(int i=0;i<3;i++){
-            HashMap<String, Object> listMap= new HashMap<String, Object>();
-            ArrayList<HashMap<String, Object>> childList=new ArrayList<HashMap<String,Object>>();
-            listMap.put("groupName", "组名"+i);
-            listMap.put("groupNumber", "项目数[" + i + "/10]");
-            mListItem.add(listMap);
-
-            for(int j=0;j<2;j++){
-                HashMap<String, Object> childMap=new HashMap<String, Object>();
-                childMap.put("lamp_headPhoto", j==0?R.drawable.main_lamp:R.drawable.main_dehumidifier);
-                childMap.put("lamp_name", j==0?"卧室灯":"除湿器");
-                childMap.put("lamp_place", "卧室");
-                childMap.put("lamp_date", j==0?"亮度":"湿度");
-                childMap.put("lamp_content", "已开");
-                childMap.put("lamp_date_explain", 57+"%");
-                childList.add(childMap);
-            }
-            mChildListItem.add(childList);
-        }
-
-		/*HashMap<String,Object> map1=new HashMap<String,Object>();
-		map1.put("lamp_headPhoto", R.drawable.main_lamp);
-    	map1.put("lamp_name", "卧室灯");
-    	map1.put("lamp_place", "卧室");
-    	map1.put("lamp_date", "亮度");
-    	map1.put("lamp_content", "已开");
-    	map1.put("lamp_date_explain", 57+"%");
-    	mListItem.add(map1);
-    	HashMap<String,Object> map2=new HashMap<String,Object>();
-		map2.put("lamp_headPhoto", R.drawable.main_dehumidifier);
-    	map2.put("lamp_name", "除湿器");
-    	map2.put("lamp_place", "客厅");
-    	map2.put("lamp_date", "湿度");
-    	map2.put("lamp_content", "已开");
-    	map2.put("lamp_date_explain", 50+"%");
-    	mListItem.add(map2);*/
+//        for(int i=0;i<3;i++){
+//            HashMap<String, Object> listMap= new HashMap<String, Object>();
+//            ArrayList<HashMap<String, Object>> childList=new ArrayList<HashMap<String,Object>>();
+//            listMap.put("groupName", "组名"+i);
+//            listMap.put("groupNumber", "项目数[" + i + "/10]");
+//            mListItem.add(listMap);
+//
+//            for(int j=0;j<2;j++){
+//                HashMap<String, Object> childMap=new HashMap<String, Object>();
+//                childMap.put("lamp_headPhoto", j==0?R.drawable.main_lamp:R.drawable.main_dehumidifier);
+//                childMap.put("lamp_name", j==0?"卧室灯":"除湿器");
+//                childMap.put("lamp_place", "卧室");
+//                childMap.put("lamp_date", j==0?"亮度":"湿度");
+//                childMap.put("lamp_content", "已开");
+//                childMap.put("lamp_date_explain", 57+"%");
+//                childList.add(childMap);
+//            }
+//            mChildListItem.add(childList);
+//        }
     }
     private void initViewPager() {
         //ViewPager init
         vpAdapter= new ViewPagerAdapter(this);
-
         pager.setAdapter(vpAdapter);
         // Bind the tabs to the ViewPager
         tabs.setViewPager(pager);
-
         pager.setCurrentItem(0);
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    fab.setVisibility(View.GONE);
+                } else
+                    fab.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private class ViewPagerAdapter extends PagerAdapter {
@@ -296,8 +297,6 @@ public class SendActivity extends AppCompatActivity {
                 return  mListView;
             }
 
-
-
         }
 
         @Override
@@ -305,10 +304,6 @@ public class SendActivity extends AppCompatActivity {
             View view = (View) object;
             container.removeView(view);
         }
-    }
-
-    private ListView getClassListView(Context context, List<String> classData) {
-        return null;
     }
 
     public static PhoneAdapter phoneAdapter=null;

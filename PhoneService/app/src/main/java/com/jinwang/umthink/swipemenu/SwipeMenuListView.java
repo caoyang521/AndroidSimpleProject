@@ -25,7 +25,7 @@ public class SwipeMenuListView extends ExpandableListView{
     private static final int TOUCH_STATE_Y = 2;
 
     private int MAX_Y = 5;
-    private int MAX_X = 2;
+    private int MAX_X = 3;
     private float mDownX;
     private float mDownY;
     private int mTouchState;
@@ -164,8 +164,7 @@ public class SwipeMenuListView extends ExpandableListView{
             case MotionEvent.ACTION_MOVE:
                 float dy = Math.abs((ev.getY() - mDownY));
                 float dx = Math.abs((ev.getX() - mDownX));
-//                if((ev.getX() - mDownX)<0)
-//                    getParent().
+
                 if (mTouchState == TOUCH_STATE_X) {
                     if (mTouchView != null) {
                         mTouchView.onSwipe(ev);

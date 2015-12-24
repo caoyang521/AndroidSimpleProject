@@ -214,4 +214,5 @@ public class Db {
         Sqldb.execSQL("DELETE FROM " +tableName);
     }
 
+
 }

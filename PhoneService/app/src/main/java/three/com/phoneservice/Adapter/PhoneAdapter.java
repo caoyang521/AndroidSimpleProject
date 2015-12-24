@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import three.com.phoneservice.CallBack;
 import three.com.phoneservice.Model.PeopleInfo;
+import three.com.phoneservice.Params.AppParams;
 import three.com.phoneservice.R;
 import three.com.phoneservice.Utility.ViewHolder;
 
@@ -24,10 +26,20 @@ public class PhoneAdapter extends BaseAdapter{
     private Context context;
     private List<PeopleInfo> phoneInfos =new ArrayList<PeopleInfo>();
     private String type;
+    private ArrayList<PeopleInfo> addToNewClassPeople=null;
+    private CallBack callBack=null;
+
     public PhoneAdapter(Context context, List<PeopleInfo> phoneInfos,String type) {
         this.context = context;
         this.phoneInfos = phoneInfos;
         this.type=type;
+    }
+    public PhoneAdapter(Context context, List<PeopleInfo> phoneInfos,String type,ArrayList<PeopleInfo> addToNewClassPeople,CallBack callBack) {
+        this.context = context;
+        this.phoneInfos = phoneInfos;
+        this.type=type;
+        this.addToNewClassPeople=addToNewClassPeople;
+        this.callBack=callBack;
     }
 
     @Override
@@ -86,18 +98,38 @@ public class PhoneAdapter extends BaseAdapter{
             circleShape = R.drawable.circle_amber;
             color = context.getResources().getColor(R.color.amber_500);
         }
-        if("send".equals(type)){
+        if(AppParams.SEDN_TYPE.equals(type)){
             holder.selected.setVisibility(View.VISIBLE);
         }
         final PeopleInfo phoneInfo= phoneInfos.get(position);
         holder.selected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckBox cb= (CheckBox) v;
+                CheckBox cb = (CheckBox) v;
                 phoneInfo.setIsChecked(cb.isChecked());
+                if (addToNewClassPeople != null) {
+                    if (cb.isChecked()) {
+                        addToNewClassPeople.add(phoneInfo);
+                    } else {
+                        IsInTheNewPeoPle(phoneInfo);
+                    }
+                    if (callBack != null) {
+                        callBack.onStart();
+                    }
+                }
             }
         });
-        holder.selected.setChecked(phoneInfo.isChecked());
+        boolean isChecked=false;
+        if(addToNewClassPeople !=null){
+            isChecked = findIsChecked(phoneInfo, isChecked);
+        }
+
+        if(isChecked){
+            holder.selected.setChecked(isChecked);
+        }
+        else{
+            holder.selected.setChecked(phoneInfo.isChecked());
+        }
         holder.head_name_tv.setBackgroundResource(circleShape);
         holder.head_name_tv.setText(phoneInfo.getPeopleName().substring(0,1));
         holder.class_name_tv.setText(phoneInfo.getClassName());
@@ -106,6 +138,25 @@ public class PhoneAdapter extends BaseAdapter{
         holder.school_number_tv.setText(phoneInfo.getSchoolNumber());
 
         return convertView;
+    }
+
+    private void IsInTheNewPeoPle(PeopleInfo phoneInfo) {
+        for(PeopleInfo newPeople : addToNewClassPeople){
+            if(newPeople.getSchoolNumber().equals(phoneInfo.getSchoolNumber())){
+                addToNewClassPeople.remove(newPeople);
+                break;
+            }
+        }
+    }
+
+    private boolean findIsChecked(PeopleInfo phoneInfo, boolean isChecked) {
+        for(PeopleInfo newPeople : addToNewClassPeople){
+            if(newPeople.getSchoolNumber().equals(phoneInfo.getSchoolNumber())){
+                isChecked=true;
+                break;
+            }
+        }
+        return isChecked;
     }
 
 }

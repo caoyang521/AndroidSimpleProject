@@ -30,6 +30,7 @@ import three.com.phoneservice.Db.Db;
 import three.com.phoneservice.Db.DbHolder;
 import three.com.phoneservice.Model.PeopleInfo;
 import three.com.phoneservice.R;
+import three.com.phoneservice.Utility.PhoneInfosHolder;
 
 /**
  * Created by Administrator on 2015/11/7.
@@ -43,7 +44,7 @@ public class SearchActivity extends AppCompatActivity {
     private SearchView searchView;
     private ListView search_list;
     private PhoneAdapter phoneAdapter;
-    private ArrayList<PeopleInfo> phoneInfos =new ArrayList<PeopleInfo>();
+    private ArrayList<PeopleInfo> phoneInfos =null;
     private Db db;
     private TextView no_preson_tv;
 
@@ -52,7 +53,9 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
         setContentView(R.layout.activity_search_status);
-
+        if(phoneInfos==null){
+            phoneInfos= PhoneInfosHolder.getPhoneInfos();
+        }
         search_list= (ListView) findViewById(R.id.search_listView);
         no_preson_tv= (TextView) findViewById(R.id.no_person);
 
@@ -130,7 +133,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                findPesonFromDb(query);
+                findPesonFromDbByQuery(query);
 
                 return false;
             }
@@ -139,13 +142,13 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
 
                 no_preson_tv.setVisibility(View.GONE);
-                findPesonFromDb(newText);
+                findPesonFromDbByQuery(newText);
                 return false;
             }
         });
     }
 
-    private void findPesonFromDb(String query) {
+    private void findPesonFromDbByQuery(String query) {
         if(DbHolder.db==null){
             DbHolder.db= Db.getInstance(SearchActivity.this);
         }

@@ -25,4 +25,6 @@ public class AppParams {
 
     public static String AppMasterSecret="bfwjzvu10b30vyjekzz0pk8umtjix7bn";
 
+    public static final String SEDN_TYPE ="send";
+
 }
