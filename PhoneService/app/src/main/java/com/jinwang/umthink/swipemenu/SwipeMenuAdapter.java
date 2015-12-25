@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -82,7 +81,7 @@ public class SwipeMenuAdapter extends BaseExpandableListAdapter implements OnSwi
 						// ���벼�ֲ���ֵ��convertview
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.main_lamp, null);
 			holder.lamp_mainLayout=(RelativeLayout)convertView.findViewById(R.id.lamp_mainLayout);
-			holder.lamp_headPhoto=(ImageView)convertView.findViewById(R.id.lamp_headPhoto);
+			holder.lamp_headPhoto=(TextView)convertView.findViewById(R.id.lamp_headPhoto);
 			holder.lamp_name = (TextView) convertView.findViewById(R.id.lamp_name);
 			holder.lamp_data = (TextView) convertView.findViewById(R.id.lamp_data);
 			holder.lamp_content = (TextView) convertView.findViewById(R.id.lamp_content);
@@ -110,7 +109,7 @@ public class SwipeMenuAdapter extends BaseExpandableListAdapter implements OnSwi
 		// ����list��TextView����ʾ
 		if(holder!=null)
 		{
-			holder.lamp_headPhoto.setImageResource(Integer.parseInt(childList.get(groupPosition).get(childPosition).get("lamp_headPhoto").toString()));
+			holder.lamp_headPhoto.setBackgroundResource(Integer.parseInt(childList.get(groupPosition).get(childPosition).get("lamp_headPhoto").toString()));
 			holder.lamp_name.setText(childList.get(groupPosition).get(childPosition).get("lamp_name").toString());
 			holder.lamp_data.setText(childList.get(groupPosition).get(childPosition).get("lamp_date").toString());
 			holder.lamp_content.setText(childList.get(groupPosition).get(childPosition).get("lamp_content").toString());
@@ -122,7 +121,7 @@ public class SwipeMenuAdapter extends BaseExpandableListAdapter implements OnSwi
 		TextView txName;
 		TextView txnumber;
 		RelativeLayout lamp_mainLayout;
-		ImageView lamp_headPhoto;
+        TextView lamp_headPhoto;
 		TextView lamp_name;
 		TextView lamp_data;
 		TextView lamp_content;
@@ -197,6 +196,7 @@ public class SwipeMenuAdapter extends BaseExpandableListAdapter implements OnSwi
 			}
 			System.out.println("���ֵ�����"+list.get(groupPosition).get("groupName").toString());
 			holder.txName.setText(list.get(groupPosition).get("groupName").toString());
+			holder.txnumber.setText(list.get(groupPosition).get("groupNumber").toString());
 			holder.txName.setTextSize(20);
 			holder.txName.setPadding(20, 10, 0, 10);
 			return convertView;

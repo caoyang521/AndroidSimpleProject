@@ -1,6 +1,7 @@
 package three.com.phoneservice.Activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -8,10 +9,12 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +42,7 @@ import three.com.phoneservice.Db.DbHolder;
 import three.com.phoneservice.Model.PeopleInfo;
 import three.com.phoneservice.Params.AppParams;
 import three.com.phoneservice.R;
+import three.com.phoneservice.Utility.GroupHolder;
 import three.com.phoneservice.Utility.UmengHelper;
 
 /**
@@ -61,6 +65,8 @@ public class SendActivity extends AppCompatActivity {
     private SwipeMenuAdapter mAdapter;
 
     private FloatingActionButton fab;
+
+    private  ArrayList<String> groupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,8 +132,49 @@ public class SendActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startAddActivity = new Intent(SendActivity.this,AddActivity.class);
-                startActivity(startAddActivity);
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(SendActivity.this);
+                builder.setTitle("请输入新建分组名称");
+                //    通过LayoutInflater来加载一个xml的布局文件作为一个View对象
+                View view = LayoutInflater.from(SendActivity.this).inflate(R.layout.dialog, null);
+                //    设置我们自己定义的布局文件作为弹出框的Content
+                builder.setView(view);
+
+                final EditText newClassNameEt = (EditText)view.findViewById(R.id.new_className_et);
+
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        String newClassName = newClassNameEt.getText().toString().trim();
+
+                        if(TextUtils.isEmpty(newClassName)){
+                            Toast.makeText(SendActivity.this, "请输入新建分组名称", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            if(groupName==null){
+                                groupName= GroupHolder.getGroupName();
+                            }
+                            groupName.add(newClassName);
+
+                            //mListView.deferNotifyDataSetChanged();
+                            Intent startAddActivity = new Intent(SendActivity.this,AddActivity.class);
+                            startActivity(startAddActivity);
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+
+                    }
+                });
+                builder.show();
             }
         });
         initEvens();
@@ -203,31 +250,49 @@ public class SendActivity extends AppCompatActivity {
         });
 
     }
+
     private void initDatas() {
         // TODO Auto-generated method stub
-        mListItem=new ArrayList<HashMap<String,Object>>();
-        mChildListItem=new ArrayList<ArrayList<HashMap<String,Object>>>();
+        mListItem = new ArrayList<HashMap<String, Object>>();
+        mChildListItem = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
-//        for(int i=0;i<3;i++){
-//            HashMap<String, Object> listMap= new HashMap<String, Object>();
-//            ArrayList<HashMap<String, Object>> childList=new ArrayList<HashMap<String,Object>>();
-//            listMap.put("groupName", "组名"+i);
-//            listMap.put("groupNumber", "项目数[" + i + "/10]");
-//            mListItem.add(listMap);
-//
-//            for(int j=0;j<2;j++){
-//                HashMap<String, Object> childMap=new HashMap<String, Object>();
-//                childMap.put("lamp_headPhoto", j==0?R.drawable.main_lamp:R.drawable.main_dehumidifier);
-//                childMap.put("lamp_name", j==0?"卧室灯":"除湿器");
-//                childMap.put("lamp_place", "卧室");
-//                childMap.put("lamp_date", j==0?"亮度":"湿度");
-//                childMap.put("lamp_content", "已开");
-//                childMap.put("lamp_date_explain", 57+"%");
-//                childList.add(childMap);
-//            }
-//            mChildListItem.add(childList);
-//        }
     }
+
+    private  ArrayList<ArrayList<PeopleInfo>> groupItem;
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(groupName==null){
+            groupName= GroupHolder.getGroupName();
+        }
+        if(groupItem==null){
+            groupItem=GroupHolder.getGroupItem();
+        }
+        mListItem.clear();
+        mChildListItem.clear();
+        for(int i=0;i<groupName.size();i++){
+            HashMap<String, Object> listMap= new HashMap<String, Object>();
+            ArrayList<HashMap<String, Object>> childList=new ArrayList<HashMap<String,Object>>();
+            listMap.put("groupName", groupName.get(i));
+            listMap.put("groupNumber", "学生数");
+            mListItem.add(listMap);
+
+            for(int j=0;j<groupItem.get(i).size();j++){
+                HashMap<String, Object> childMap=new HashMap<String, Object>();
+                childMap.put("lamp_headPhoto", R.drawable.circle_cyan);
+                childMap.put("lamp_name", groupItem.get(i).get(j).getPeopleName());
+                childMap.put("lamp_place", "");
+                childMap.put("lamp_date", "");
+                childMap.put("lamp_content", groupItem.get(i).get(j).getClassName());
+                childMap.put("lamp_date_explain", "");
+                childList.add(childMap);
+            }
+            mChildListItem.add(childList);
+        }
+
+    }
+
     private void initViewPager() {
         //ViewPager init
         vpAdapter= new ViewPagerAdapter(this);

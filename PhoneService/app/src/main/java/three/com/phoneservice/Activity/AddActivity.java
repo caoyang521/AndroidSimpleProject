@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -21,6 +22,7 @@ import three.com.phoneservice.Db.DbHolder;
 import three.com.phoneservice.Model.PeopleInfo;
 import three.com.phoneservice.Params.AppParams;
 import three.com.phoneservice.R;
+import three.com.phoneservice.Utility.GroupHolder;
 import three.com.phoneservice.Utility.PhoneInfosHolder;
 
 /**
@@ -34,13 +36,16 @@ public class AddActivity extends AppCompatActivity {
     private EditText et_search;
     private ArrayList<PeopleInfo> addToNewClassPeople=new ArrayList<PeopleInfo>();
     private Button okBtn;
-
+    private static ArrayList<ArrayList<PeopleInfo>> groupItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         if(phoneInfos==null){
             phoneInfos= PhoneInfosHolder.getPhoneInfos();
+        }
+        if(groupItem==null){
+            groupItem=GroupHolder.getGroupItem();
         }
         new Thread(new Runnable() {
             @Override
@@ -92,6 +97,14 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                groupItem.add(addToNewClassPeople);
+                finish();
             }
         });
     }

@@ -5,13 +5,23 @@
     android:layout_height="wrap_content"
     android:id="@+id/lamp_mainLayout"
     android:paddingBottom="5dp">
-    <ImageView 
-        android:id="@+id/lamp_headPhoto" 
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/main_lamp"/>
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/lamp_headPhoto"
+        android:text="张"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_width="56dp"
+        android:textColor="#ffffff"
+        android:layout_height="56dp"
+        android:layout_marginTop="10dp"/>
+    <!--<ImageView -->
+        <!--android:id="@+id/lamp_headPhoto" -->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:src="@drawable/main_lamp"/>-->
     <TextView
         android:id="@+id/lamp_name"
         android:layout_width="wrap_content"
@@ -28,20 +38,20 @@
         android:maxEms="6"
         android:singleLine="true"
         android:ellipsize="end"/>
-    <TextView 
-        android:id="@+id/lamp_place"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/main_lamp_shape"
-        android:layout_alignTop="@id/lamp_name"
-        android:layout_toRightOf="@id/lamp_name"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:textSize="15dp"
-        android:text="卧室"
-        android:drawableLeft="@drawable/main_place_img"/>
+    <!--<TextView -->
+        <!--android:id="@+id/lamp_place"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/main_lamp_shape"-->
+        <!--android:layout_alignTop="@id/lamp_name"-->
+        <!--android:layout_toRightOf="@id/lamp_name"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:paddingLeft="5dp"-->
+        <!--android:paddingRight="5dp"-->
+        <!--android:textSize="15dp"-->
+        <!--android:text="卧室"-->
+        <!--android:drawableLeft="@drawable/main_place_img"/>-->
     <TextView
         android:id="@+id/lamp_content"
         android:layout_width="wrap_content"
@@ -53,7 +63,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
         android:textSize="15dp"
-        android:drawableLeft="@drawable/main_lamp_switch"/>
+        />
     <TextView
         android:layout_alignTop="@id/lamp_headPhoto"
         android:id="@+id/lamp_data"
